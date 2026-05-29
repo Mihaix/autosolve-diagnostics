@@ -1,0 +1,35 @@
+[
+  {
+    "content": "Fault code P0420 on VW Golf Mk7 indicates the catalytic converter efficiency is below the threshold. The ECU detects this via the downstream oxygen sensor. Common causes include a faulty catalytic converter or a damaged O2 sensor.",
+    "metadata": {
+      "make": "Volkswagen",
+      "model": "Golf",
+      "year_range": "2013-2019",
+      "source_file": "vw_golf_workshop_manual.pdf",
+      "page_number": 214,
+      "section": "Engine - Emissions"
+    }
+  },
+  {
+    "content": "To replace the catalytic converter on a VW Golf Mk7: 1. Allow the exhaust to cool completely. 2. Disconnect the upstream and downstream O2 sensor connectors. 3. Remove the two bolts connecting the downpipe to the catalytic converter. Torque spec for reinstallation: 25 Nm.",
+    "metadata": {
+      "make": "Volkswagen",
+      "model": "Golf",
+      "year_range": "2013-2019",
+      "source_file": "vw_golf_workshop_manual.pdf",
+      "page_number": 215,
+      "section": "Engine - Emissions"
+    }
+  },
+  {
+    "content": "Fault code P0171 on VW Golf Mk7 means the fuel system is running lean on bank 1. The ECU is adding fuel correction but the mixture remains too lean. Likely causes: vacuum leak, faulty MAF sensor, or a clogged fuel injector.",
+    "metadata": {
+      "make": "Volkswagen",
+      "model": "Golf",
+      "year_range": "2013-2019",
+      "source_file": "vw_golf_tsb_fuel_system.pdf",
+      "page_number": 3,
+      "section": "Fuel System"
+    }
+  }
+]

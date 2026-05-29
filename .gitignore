@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtualenvs
+venv/
+.venv/
+env/
+autosolve_backend/venv/
+
+# Secrets / env
+.env
+.env.*
+*.env
+
+# Build / packaging
+build/
+dist/
+*.egg-info/
+pip-wheel-metadata/
+
+# IDEs
+.vscode/
+.idea/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Tests / logs
+.pytest_cache/
+*.log
+logs/
+
+# Data, DBs, models, caches
+data/
+datasets/
+database/
+chroma_db/
+*.db
+*.sqlite*
+*.npy
+*.npz
+checkpoints/
+weights/
+models/
+*.ckpt
+*.pt
+*.bin
+
+# Hugging Face / caches
+.cache/
+hf_cache/
+transformers_cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
