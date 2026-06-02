@@ -23,7 +23,7 @@ STRICT RULES — follow these without exception:
 [The single most likely cause based only on the context]
 
 --- STEP-BY-STEP SOLUTION ---
-[Numbered repair or diagnostic steps, taken only from context]
+[Numbered repair or diagnostic steps, taken only from context. If there are no steps in the context, write: "No specific repair procedure is outlined in the documentation."]
 
 --- SOURCES ---
 [List each source file and page number you used]

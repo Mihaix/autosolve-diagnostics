@@ -1,112 +1,118 @@
-# RFC — AutoSolve Diagnostics
-**Team size:** 3  
-**Submission deadline:** End of Week 12
+RFC — AutoSolve Diagnostics
+Team size: 3
 
----
+Submission deadline: End of Week 12
 
-## 1. Introduction
-
+1. Introduction
 AutoSolve Diagnostics is an LLM-based conversational agent designed to help everyday car owners, advanced DIY enthusiasts, and professional mechanics understand and resolve vehicle faults. The system accepts a natural language symptom description or an OBD-II diagnostic trouble code (DTC) as input and produces a clear, grounded explanation of the underlying problem along with a step-by-step repair procedure.
 
----
+2. Problem Definition
+Task type: Conditional text generation with grounded retrieval (Retrieval-Augmented Generation).
 
-## 2. Problem Definition
+Input: A user query via a React frontend consisting of:
 
-**Task type:** Conditional text generation with grounded retrieval (Retrieval-Augmented Generation).
+A natural language symptom description or an OBD-II diagnostic trouble code (e.g., P0420)
 
-**Input:** A user query consisting of one or more of the following:
-- A natural language symptom description (e.g., *"my engine stutters at idle and the check engine light is on"*)
-- An OBD-II diagnostic trouble code (e.g., `P0420`)
-- Vehicle context: make, model, and year (e.g., *Toyota Camry 2019*)
+Vehicle context: Make, Model, and Year (e.g., Volkswagen Golf 2018)
 
-**Output:** A structured response containing:
-1. A plain-language explanation of the identified fault and its root cause
-2. A step-by-step repair or diagnostic procedure
-3. A source citation indicating the originating document, section, and page number
+Output: A structured JSON response containing:
 
-**Constraints and challenges:**
+A plain-language explanation of the identified fault and its root cause.
 
-- **Zero-tolerance hallucination policy.** The system must not invent or infer technical specifications (torque values, clearances, part numbers, fluid capacities). All generated content must be traceable to a retrieved document chunk. If no relevant document is found for the queried vehicle and fault combination, the system must explicitly acknowledge this and fall back to safe, generic guidance.
-- **Retrieval precision.** The corpus spans multiple vehicle makes, models, and years. A retrieval error that returns a torque specification for the wrong engine variant is a safety-relevant failure. Metadata filtering by vehicle identity must be enforced at retrieval time.
-- **Document heterogeneity.** Workshop manuals, TSBs, and repair guides differ significantly in structure, formatting, and terminology, requiring a robust and consistent ingestion pipeline.
-- **User population diversity.** The system must produce output that is interpretable by both a professional mechanic and a non-technical car owner.
+A step-by-step repair or diagnostic procedure.
 
----
+Source citations indicating the originating document, section, and page number.
 
-## 3. State of the Art
+A boolean fallback flag indicating if the system had to resort to generic advice due to missing data.
 
+Constraints and challenges:
+
+Zero-tolerance hallucination policy. The system must not invent or infer technical specifications (torque values, clearances, part numbers). All generated content must be traceable to a retrieved document chunk.
+
+Retrieval precision. The corpus spans multiple vehicles. A retrieval error returning specs for the wrong engine variant is a safety-relevant failure. Metadata filtering by vehicle identity (make and model) must be enforced at the database level prior to retrieval.
+
+Strict Formatting: Smaller LLMs can struggle with JSON schema adherence. The backend must employ robust parsing (e.g., Regex) to guarantee frontend stability.
+
+3. State of the Art
 Current approaches to automated vehicle fault diagnosis and LLM-grounded question answering span several research directions:
 
-**[1] Retrieval-Augmented Generation (RAG)**
-Lewis, P. et al. (2020). *Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.* NeurIPS 2020.
-[https://arxiv.org/abs/2005.11401](https://arxiv.org/abs/2005.11401)
-The foundational work establishing the RAG paradigm, in which a dense retriever conditions a sequence-to-sequence model on relevant external documents at inference time. AutoSolve directly adopts this architecture, replacing the open-domain Wikipedia corpus with a domain-specific automotive technical corpus.
+[1] Retrieval-Augmented Generation (RAG)
+Lewis, P. et al. (2020). Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks. NeurIPS 2020.
+The foundational work establishing the RAG paradigm. AutoSolve directly adopts this architecture, replacing the open-domain Wikipedia corpus with a domain-specific automotive technical corpus.
 
-**[2] Dense Passage Retrieval**
-Karpukhin, V. et al. (2020). *Dense Passage Retrieval for Open-Domain Question Answering.* EMNLP 2020.
-[https://arxiv.org/abs/2004.04906](https://arxiv.org/abs/2004.04906)
-Demonstrates that dense vector similarity retrieval substantially outperforms sparse BM25 retrieval for semantically complex queries — directly relevant to symptom-based queries where the user's vocabulary may differ from manual terminology.
+[2] Dense Passage Retrieval
+Karpukhin, V. et al. (2020). Dense Passage Retrieval for Open-Domain Question Answering. EMNLP 2020.
+Demonstrates that dense vector similarity retrieval substantially outperforms sparse BM25 retrieval for semantically complex queries — directly relevant to symptom-based queries.
 
-**[3] LLM Hallucination Mitigation**
-Huang, L. et al. (2023). *A Survey on Hallucination in Large Language Models.* arXiv.
-[https://arxiv.org/abs/2311.05232](https://arxiv.org/abs/2311.05232)
-A comprehensive survey of hallucination types and mitigation strategies in LLMs. Informs the design of AutoSolve's retrieval confidence threshold and fallback mechanism.
+[3] LLM Hallucination Mitigation
+Huang, L. et al. (2023). A Survey on Hallucination in Large Language Models. arXiv.
+Informs the design of AutoSolve's strict system prompting, confidence threshold routing, and graceful degradation (fallback mechanisms).
 
-**[4] Automotive Fault Diagnosis with Machine Learning**
-Vachtsevanos, G. et al. (2006). *Intelligent Fault Diagnosis and Prognosis for Engineering Systems.* Wiley.
-Covers classical ML approaches to fault classification in automotive and engineering systems. Provides a baseline for understanding the diagnostic problem prior to the LLM era.
+[4] OBD-II Standardisation and Fault Code Taxonomy
+SAE International. SAE J1979 — E/E Diagnostic Test Modes.
+The standardisation document defining OBD-II diagnostic trouble codes. Serves as the authoritative reference for the query expansion dictionary utilized in the AutoSolve backend.
 
-**[5] OBD-II Standardisation and Fault Code Taxonomy**
-SAE International. *SAE J1979 — E/E Diagnostic Test Modes.*
-[https://www.sae.org/standards/content/j1979_201702/](https://www.sae.org/standards/content/j1979_201702/)
-The standardisation document defining OBD-II diagnostic trouble codes and test modes. Serves as the authoritative reference for the fault code taxonomy used in corpus construction and query parsing.
+4. Proposed Solution
+Architecture: A decoupled RAG pipeline. A React frontend communicates via REST API with a FastAPI Python backend, utilizing LangChain as the orchestration framework to manage database retrieval and LLM interactions.
 
----
+Pipeline overview:
 
-## 4. Proposed Solution
+Offline ingestion phase (Data Engineering):
 
-**Architecture:** A RAG pipeline with a strict grounding constraint, implemented in Python using LangChain as the orchestration framework.
+PDF documents (manuals, TSBs) and web wikis are ingested and chunked using PyMuPDF or web scrapers.
 
-**Pipeline overview:**
+Documents are formatted into a strict JSON schema containing the content and a metadata dictionary (make, model, year range, source file, page number).
 
-*Offline ingestion phase (runs once, updated when corpus changes):*
-1. PDF documents (manuals, TSBs, repair guides) are ingested using `PyMuPDF`, which preserves page structure and handles multi-column technical layouts.
-2. Documents are segmented into overlapping chunks of approximately 400 tokens, with vehicle make/model/year extracted and stored as metadata alongside each chunk.
-3. Each chunk is embedded using OpenAI `text-embedding-3-small`, producing a 1536-dimensional dense vector.
-4. Vectors and metadata are persisted in a local **Chroma DB** instance, indexed for metadata pre-filtering.
+Each chunk is embedded using sentence-transformers/all-MiniLM-L6-v2, producing a 384-dimensional dense vector.
 
-*Online query phase (per user request):*
-1. The user's input is parsed to extract the vehicle identity (make, model, year) and the fault descriptor (symptom text or OBD code).
-2. The query string is embedded with the same model used at ingestion.
-3. A metadata pre-filter restricts the search space to documents tagged for the queried vehicle before cosine similarity search retrieves the top-k most relevant chunks (k = 5).
-4. The cosine similarity score of the top-1 result is evaluated against a tuned confidence threshold (initially 0.75). If the score falls below the threshold, the system routes to a safe fallback prompt that prohibits the LLM from generating any specific technical values.
-5. Retrieved chunks, their source citations, and the user query are assembled into a structured prompt and passed to the LLM (`claude-sonnet-4-20250514` or `gpt-4o-mini` via API, abstracted behind LangChain's `BaseChatModel` interface for swappability).
-6. The LLM generates a structured response: fault explanation, step-by-step repair procedure, and cited sources. A post-generation validation step checks that every factual claim is supported by at least one cited chunk.
+Vectors and metadata are persisted in a local Chroma DB instance.
 
-**Frameworks and models:**
--Orchestration: LangChain (Python)
--Embedding: sentence-transformers/all-MiniLM-L6-v2
--Vector store: Chroma DB (local persistent)
--PDF ingestion: PyMuPDF (fitz)
--LLM backend: mistralai/Mistral-7B-Instruct-v0.2 served via the Hugging Face Inference API
+Online query phase (Backend API):
 
----
+Query Expansion: The user's query is intercepted. If an OBD-II code (e.g., P0171) is detected, the backend performs an O(1) lookup against a local obd_codes.json dictionary and expands the query into a full semantic sentence (e.g., "P0171 System Too Lean fault code diagnosis repair symptoms").
 
-## 5. Dataset
+The expanded query is embedded using the all-MiniLM-L6-v2 model.
 
-**Dataset name:** AutoSolve Technical Corpus v1
+Metadata Filtering: A hard-coded $and filter restricts the search space to documents matching the exact make and model before cosine similarity search retrieves the top 5 chunks.
 
-**Sources:**
-- OEM workshop and service manuals (make/model/year-specific, sourced as publicly available PDFs)
-- Technical Service Bulletins (TSBs) from manufacturer portals and [NHTSA TSB database](https://www.nhtsa.gov/vehicle/tsbs)
-- Verified third-party repair guides (Haynes, Chilton series)
-- OBD-II fault code reference database (based on SAE J1979 taxonomy, supplemented with make-specific extended codes)
+Confidence Routing: The top score is evaluated against a tuned threshold (e.g., 0.20, calibrated for MiniLM's strict semantic scoring). If below the threshold, the system routes to a safe, non-technical fallback prompt.
 
-**Description:** A curated collection of structured automotive technical documents covering a target set of vehicle makes, models, and model years to be finalised during corpus construction. Each document is tagged with vehicle metadata (make, model, year range, engine variant) to enable retrieval pre-filtering.
+Generation & Guardrails: The retrieved chunks are assembled into a prompt. A strict SystemMessage is injected to explicitly forbid the LLM from hallucinating repair steps or numerical values not found in the context.
 
-**Expected preprocessing steps:**
-1. PDF text extraction using PyMuPDF, with page number and section header retention.
-2. Heuristic cleaning to remove headers, footers, page numbers, and table-of-contents entries that do not carry diagnostic content.
-3. Chunking into 400-token overlapping segments (50-token overlap) with metadata annotation per chunk.
-4. Embedding generation and ingestion into Chroma DB.
-5. Manual spot-check of a random sample of chunks to verify extraction fidelity, particularly for tables containing torque and clearance specifications.
+Parsing: The LLM output is processed using a custom Regular Expression (Regex) parser to strip unexpected markdown, extract the required sections, and return a clean JSON payload to the frontend.
+
+Frameworks and models:
+
+Frontend Interface: React.js
+
+Backend API: FastAPI (Python)
+
+Orchestration: LangChain
+
+Embedding Model: sentence-transformers/all-MiniLM-L6-v2 (384-dimensional vectors)
+
+Vector Store: Chroma DB (local persistent)
+
+LLM Backend: mistralai/Mistral-7B-Instruct-v0.2 served via Hugging Face Inference API (Featherless-AI provider)
+
+5. Dataset
+Dataset name: AutoSolve Technical Corpus v1
+
+Sources:
+
+OEM workshop and service manuals (sourced as publicly available PDFs)
+
+Technical Service Bulletins (TSBs)
+
+VAG-specific diagnostic wikis (e.g., Ross-Tech)
+
+obd_codes.json: A static key-value dictionary based on the SAE J1979 taxonomy for dynamic query expansion.
+
+Data Contracts:
+The Data Engineering pipeline must output data in a strict JSON array format to be consumed by the Chroma DB ingestion script. Each item must contain:
+
+content: The raw text chunk (approx. 150-400 words).
+
+metadata: A dictionary containing make, model, year_range, source_file, page_number, and section.
+
+This structure guarantees that the retrieval engine can isolate documents by specific vehicle chassis configurations, preventing cross-contamination of torque specifications or repair procedures.

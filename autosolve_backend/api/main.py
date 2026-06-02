@@ -1,5 +1,7 @@
 import os
 import sys
+import json
+import re
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
@@ -45,7 +47,19 @@ class DiagnosticResponse(BaseModel):
 
 CHROMA_PATH          = "./database/chroma_db"
 COLLECTION_NAME      = "autosolve_diagnostics"
-CONFIDENCE_THRESHOLD = 0.10
+CONFIDENCE_THRESHOLD = 0.20
+
+# LOAD OBD-II TROUBLE CODES DICTIONARY
+OBD_CODES = {}
+OBD_FILE_PATH = os.path.join(os.path.dirname(__file__), '..', 'data', 'obd_codes.json')
+try:
+    with open(OBD_FILE_PATH, 'r', encoding='utf-8') as f:
+        OBD_CODES = json.load(f)
+    print(f"✓ Loaded {len(OBD_CODES)} OBD-II trouble codes")
+except FileNotFoundError:
+    print(f"⚠ Warning: OBD codes file not found at {OBD_FILE_PATH}")
+except json.JSONDecodeError as e:
+    print(f"✗ Error parsing OBD codes JSON: {e}")
 
 print("Loading embedding model...")
 embedding_model = HuggingFaceEmbeddings(
@@ -69,18 +83,50 @@ hf_client = InferenceClient(
 print("Mistral connected. Server ready.")
 
 
-# -------------------------------------------------------
-# HELPER — call the LLM using chat_completion
-#
-# WHY chat_completion and not text_generation:
-# HuggingFace routes Mistral-7B-Instruct through featherless-ai
-# which only supports the conversational (chat) interface.
-# chat_completion sends the prompt as a user message,
-# which is exactly what that provider expects.
-# -------------------------------------------------------
+# HELPER: DETECT OBD CODE IN QUERY
+def extract_obd_code(query: str) -> str:
+    """
+    Extract OBD-II code from query if present.
+    Returns the code (e.g., 'P0420') or None if not found.
+    OBD codes format: Letter (P/C/U/B) + 4 digits
+    """
+    match = re.search(r'([PCUB]\d{4})', query.upper())
+    if match:
+        return match.group(1)
+    return None
+
+
+# HELPER: EXPAND OBD QUERY
+def expand_query_with_obd(query: str) -> str:
+    """
+    If query contains OBD code, expand it with its meaning
+    for better semantic similarity matching.
+    
+    Example:
+    Input:  "P0420"
+    Output: "P0420 Catalyst System Efficiency Below Threshold Bank 1 
+             catalytic converter efficiency diagnosis repair"
+    """
+    obd_code = extract_obd_code(query)
+    
+    if obd_code and obd_code in OBD_CODES:
+        description = OBD_CODES[obd_code]
+        # Expand query with code meaning for better retrieval
+        expanded = f"{obd_code} {description} fault code diagnosis repair symptoms causes"
+        print(f"[QUERY EXPANSION] {obd_code} → expanded for semantic search")
+        return expanded
+    
+    # If no OBD code or not in dictionary, use original query
+    return query
+
+
+# HELPER: CALL THE LLM
 def call_llm(prompt: str) -> str:
     response = hf_client.chat_completion(
-        messages=[{"role": "user", "content": prompt}],
+        messages=[
+            {"role": "system", "content": "You are a strict diagnostic parser. You MUST NOT invent, guess, or hallucinate any repair steps, symptoms, or numerical values. If a step is not explicitly written in the provided context, you must not output it."},
+            {"role": "user", "content": prompt}
+        ],
         model="mistralai/Mistral-7B-Instruct-v0.2",
         max_tokens=1024,
         temperature=0.1
@@ -88,9 +134,7 @@ def call_llm(prompt: str) -> str:
     return response.choices[0].message.content
 
 
-# -------------------------------------------------------
-# HELPER — parse the LLM text response into fields
-# -------------------------------------------------------
+# HELPER: PARSE LLM RESPONSE
 def parse_llm_response(text: str) -> dict:
     sections = {
         "problem_elaboration": "",
@@ -99,57 +143,96 @@ def parse_llm_response(text: str) -> dict:
         "sources": []
     }
     current_section = None
-    lines = text.strip().split("\n")
+    
+    # 1. Strip out markdown bolding/headers Mistral might have hallucinated
+    clean_text = text.replace("**", "").replace("###", "")
+    lines = clean_text.strip().split("\n")
 
     for line in lines:
         line = line.strip()
-
-        if "PROBLEM EXPLANATION" in line.upper():
+        if not line: 
+            continue
+        
+        upper_line = line.upper()
+        
+        # 2. Use regex to find the header and grab any text on the same line
+        if "PROBLEM EXPLANATION" in upper_line:
             current_section = "problem_elaboration"
-        elif "CORE CAUSE" in line.upper():
+            content = re.split(r'PROBLEM EXPLANATION[\-\:]*', line, flags=re.IGNORECASE)[-1].strip()
+            if content: sections[current_section] += content + " "
+            
+        elif "CORE CAUSE" in upper_line:
             current_section = "core_cause"
-        elif "STEP-BY-STEP SOLUTION" in line.upper() or "SOLUTION" in line.upper():
+            content = re.split(r'CORE CAUSE[\-\:]*', line, flags=re.IGNORECASE)[-1].strip()
+            if content: sections[current_section] += content + " "
+            
+        elif "STEP-BY-STEP SOLUTION" in upper_line or "SOLUTION" in upper_line:
             current_section = "solution"
-        elif "SOURCES" in line.upper():
+            content = re.split(r'(?:STEP-BY-STEP SOLUTION|SOLUTION)[\-\:]*', line, flags=re.IGNORECASE)[-1].strip()
+            if content: sections[current_section] += content + " "
+            
+        elif "SOURCES" in upper_line:
             current_section = "sources"
-        elif current_section == "sources" and line:
-            sections["sources"].append(line)
-        elif current_section and line and "---" not in line:
-            if current_section != "sources":
+            
+        else:
+            # 3. Append normal lines to whatever section is currently active
+            if current_section == "sources":
+                # Clean up bullet points or numbers Mistral might add to sources
+                clean_source = re.sub(r'^[\-\*\d\.]+\s*', '', line)
+                if clean_source: 
+                    sections["sources"].append(clean_source)
+            elif current_section:
                 sections[current_section] += line + " "
 
+    # 4. Clean up trailing/leading whitespace and stray dashes
     for key in ["problem_elaboration", "core_cause", "solution"]:
-        sections[key] = sections[key].strip()
+        # .strip() removes spaces, .lstrip('-') removes leading dashes
+        sections[key] = sections[key].strip().lstrip('-').strip()
 
+    # Fallback if the LLM completely ignored the format
     if not sections["solution"]:
-        sections["solution"] = text.strip()
+        sections["solution"] = text.strip().lstrip('-').strip()
 
     return sections
 
 
-# -------------------------------------------------------
-# ENDPOINT 1 — GET /health
-# -------------------------------------------------------
+# ENDPOINT 1: HEALTH CHECK
 @app.get("/health")
 def health_check():
     return {
         "status": "ok",
         "model": "Mistral-7B-Instruct-v0.2",
         "embedding": "all-MiniLM-L6-v2",
-        "confidence_threshold": CONFIDENCE_THRESHOLD
+        "confidence_threshold": CONFIDENCE_THRESHOLD,
+        "obd_codes_loaded": len(OBD_CODES)
     }
 
 
-# -------------------------------------------------------
-# ENDPOINT 2 — POST /diagnose
-# -------------------------------------------------------
+# ENDPOINT 2: DIAGNOSTIC QUERY
 @app.post("/diagnose", response_model=DiagnosticResponse)
 def diagnose(request: DiagnosticRequest):
+    """
+    Diagnostic endpoint following RFC Section 4 - Online query phase:
+    1. Parse & expand query (OBD code + vehicle context)
+    2. Retrieve relevant documents with metadata pre-filter
+    3. Check confidence threshold
+    4. Route to fallback or normal LLM path
+    5. Generate structured response
+    6. Return with source citations
+    """
 
-    # STEP 1 — RETRIEVE
+    # RFC STEP 1: PARSE & EXPAND QUERY
+    # Extract vehicle identity (make, model, year) and fault descriptor
+    expanded_query = expand_query_with_obd(request.query)
+    
+    print(f"\n[QUERY] make={request.make}, model={request.model}, year={request.year}")
+    print(f"[QUERY] original: {request.query}")
+    print(f"[QUERY] expanded: {expanded_query}")
+
+    # RFC STEP 2-3: RETRIEVE WITH METADATA PRE-FILTER
     try:
         results = vector_store.similarity_search_with_relevance_scores(
-            query=request.query,
+            query=expanded_query,  # Use expanded query for better retrieval
             k=5,
             filter={
                 "$and": [
@@ -164,11 +247,13 @@ def diagnose(request: DiagnosticRequest):
             detail=f"Retrieval error: {str(e)}"
         )
 
-    # STEP 2 — CONFIDENCE CHECK
+    # RFC STEP 4: CONFIDENCE CHECK
     top_score = results[0][1] if results else 0.0
+    print(f"[RETRIEVAL] Top confidence score: {top_score:.4f} (threshold: {CONFIDENCE_THRESHOLD})")
 
-    # STEP 3B — FALLBACK PATH
+    # RFC STEP 4B: FALLBACK PATH (LOW CONFIDENCE)
     if top_score < CONFIDENCE_THRESHOLD:
+        print(f"[FALLBACK] Score {top_score:.4f} below threshold {CONFIDENCE_THRESHOLD}")
         fallback_prompt = FALLBACK_PROMPT.format(question=request.query)
         try:
             fallback_text = call_llm(fallback_prompt)
@@ -187,7 +272,8 @@ def diagnose(request: DiagnosticRequest):
             is_fallback=True
         )
 
-    # STEP 3A — NORMAL PATH
+    # RFC STEP 4A: NORMAL PATH (HIGH CONFIDENCE)
+    print(f"[LLM] Generating response with {len(results)} context chunks")
     context_parts = []
     source_list   = []
 
@@ -202,7 +288,10 @@ def diagnose(request: DiagnosticRequest):
         if citation not in source_list:
             source_list.append(citation)
 
-    context      = "\n\n".join(context_parts)
+    context = "\n\n".join(context_parts)
+    
+    # RFC STEP 5: ASSEMBLE PROMPT (use original query, not expanded)
+    # This ensures LLM answers what user actually asked
     diag_prompt  = DIAGNOSTIC_PROMPT.format(
         context=context,
         question=request.query
@@ -216,7 +305,7 @@ def diagnose(request: DiagnosticRequest):
             detail=f"LLM error: {str(e)}"
         )
 
-    # STEP 4 — PARSE + RETURN
+    # RFC STEP 6: PARSE & RETURN
     parsed = parse_llm_response(llm_response)
 
     return DiagnosticResponse(
