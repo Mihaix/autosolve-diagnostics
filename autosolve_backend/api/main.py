@@ -7,22 +7,22 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import List
-
+from huggingface_hub import InferenceClient
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
-from huggingface_hub import InferenceClient
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from core.prompt_template import DIAGNOSTIC_PROMPT, FALLBACK_PROMPT
 
 load_dotenv()
 
-app = FastAPI(
-    title="AutoSolve Diagnostics API",
-    description="RAG-based automotive diagnostic agent",
-    version="1.0.0"
-)
+HF_TOKEN = os.getenv("HUGGINGFACE_TOKEN") or os.getenv("HUGGINGFACEHUB_API_TOKEN")
+if not HF_TOKEN:
+    raise ValueError("Missing HuggingFace token in .env (set HUGGINGFACE_TOKEN)")
+
+app = FastAPI(title="AutoSolve Diagnostics API")
 
 app.add_middleware(
     CORSMiddleware,
@@ -41,25 +41,23 @@ class DiagnosticResponse(BaseModel):
     problem_elaboration: str
     core_cause: str
     solution: str
-    sources: List[str]
+    sources: list[str]
     confidence_score: float
     is_fallback: bool
+
 
 CHROMA_PATH          = "./database/chroma_db"
 COLLECTION_NAME      = "autosolve_diagnostics"
 CONFIDENCE_THRESHOLD = 0.20
 
-# LOAD OBD-II TROUBLE CODES DICTIONARY
 OBD_CODES = {}
 OBD_FILE_PATH = os.path.join(os.path.dirname(__file__), '..', 'data', 'obd_codes.json')
 try:
     with open(OBD_FILE_PATH, 'r', encoding='utf-8') as f:
         OBD_CODES = json.load(f)
-    print(f"✓ Loaded {len(OBD_CODES)} OBD-II trouble codes")
+    print(f"Loaded {len(OBD_CODES)} OBD-II codes.")
 except FileNotFoundError:
-    print(f"⚠ Warning: OBD codes file not found at {OBD_FILE_PATH}")
-except json.JSONDecodeError as e:
-    print(f"✗ Error parsing OBD codes JSON: {e}")
+    print(f"Warning: obd_codes.json not found at {OBD_FILE_PATH}. Continuing without it.")
 
 print("Loading embedding model...")
 embedding_model = HuggingFaceEmbeddings(
@@ -78,53 +76,73 @@ print("Chroma DB connected.")
 print("Connecting to Mistral via HuggingFace...")
 hf_client = InferenceClient(
     provider="featherless-ai",
-    token=os.getenv("HUGGINGFACEHUB_API_TOKEN")
+    token=HF_TOKEN
 )
 print("Mistral connected. Server ready.")
 
 
-# HELPER: DETECT OBD CODE IN QUERY
-def extract_obd_code(query: str) -> str:
-    """
-    Extract OBD-II code from query if present.
-    Returns the code (e.g., 'P0420') or None if not found.
-    OBD codes format: Letter (P/C/U/B) + 4 digits
-    """
-    match = re.search(r'([PCUB]\d{4})', query.upper())
-    if match:
-        return match.group(1)
-    return None
+HEADER_RE = re.compile(
+    r'^\s*-{2,}\s*(PROBLEM EXPLANATION|CORE CAUSE|STEP-BY-STEP SOLUTION)\s*-{2,}\s*$',
+    re.IGNORECASE
+)
+
+SECTION_MAP = {
+    "PROBLEM EXPLANATION": "problem_elaboration",
+    "CORE CAUSE":          "core_cause",
+    "STEP-BY-STEP SOLUTION": "solution",
+}
+
+def expand_query(query: str) -> str:
+    q = query.strip()
+
+    # Standard OBD-II: letter + 4 digits (P0420, C1234, etc.)
+    obd_match = re.search(r'([PCUB]\d{4})', q.upper())
+    if obd_match:
+        code = obd_match.group(1)
+        description = OBD_CODES.get(code, "")
+        if description:
+            return f"{code} {description} diagnosis"
+        return code
+
+    # VAG-specific numeric code: 4 or 5 digits only
+    vag_match = re.fullmatch(r'\d{4,5}', q)
+    if vag_match:
+        return f"Fault Code: {q}"
+
+    # Natural language query — use as-is
+    return q
 
 
-# HELPER: EXPAND OBD QUERY
-def expand_query_with_obd(query: str) -> str:
-    """
-    If query contains OBD code, expand it with its meaning
-    for better semantic similarity matching.
-    
-    Example:
-    Input:  "P0420"
-    Output: "P0420 Catalyst System Efficiency Below Threshold Bank 1 
-             catalytic converter efficiency diagnosis repair"
-    """
-    obd_code = extract_obd_code(query)
-    
-    if obd_code and obd_code in OBD_CODES:
-        description = OBD_CODES[obd_code]
-        # Expand query with code meaning for better retrieval
-        expanded = f"{obd_code} {description} fault code diagnosis repair symptoms causes"
-        print(f"[QUERY EXPANSION] {obd_code} → expanded for semantic search")
-        return expanded
-    
-    # If no OBD code or not in dictionary, use original query
-    return query
+
+def rerank(results: list, original_query: str) -> list:
+    query_lower = original_query.strip().lower()
+    boosted = []
+
+    for doc, score in results:
+        if query_lower in doc.page_content.lower():
+            boosted.append((doc, score, score + 1.0))  # (doc, original, boosted)
+        else:
+            boosted.append((doc, score, score))
+
+    # Sort by boosted score, highest first
+    boosted.sort(key=lambda x: x[2], reverse=True)
+
+    # Return top 5 as (doc, original_score) tuples
+    return [(doc, original_score) for doc, original_score, _ in boosted[:5]]
 
 
-# HELPER: CALL THE LLM
 def call_llm(prompt: str) -> str:
     response = hf_client.chat_completion(
         messages=[
-            {"role": "system", "content": "You are a strict diagnostic parser. You MUST NOT invent, guess, or hallucinate any repair steps, symptoms, or numerical values. If a step is not explicitly written in the provided context, you must not output it."},
+            {
+                "role": "system",
+                "content": (
+                    "You are a strict automotive diagnostic assistant. "
+                    "Never invent repair steps, part numbers, or file names. "
+                    "Answer only from the provided context. "
+                    "Keep responses concise and never repeat yourself."
+                )
+            },
             {"role": "user", "content": prompt}
         ],
         model="mistralai/Mistral-7B-Instruct-v0.2",
@@ -134,69 +152,53 @@ def call_llm(prompt: str) -> str:
     return response.choices[0].message.content
 
 
-# HELPER: PARSE LLM RESPONSE
-def parse_llm_response(text: str) -> dict:
+def parse_response(text: str) -> dict:
     sections = {
         "problem_elaboration": "",
         "core_cause": "",
         "solution": "",
-        "sources": []
     }
     current_section = None
-    
-    # 1. Strip out markdown bolding/headers Mistral might have hallucinated
-    clean_text = text.replace("**", "").replace("###", "")
-    lines = clean_text.strip().split("\n")
 
-    for line in lines:
-        line = line.strip()
-        if not line: 
+    # Strip common LLM stop tokens and markdown noise
+    clean = (text
+             .replace("**", "")
+             .replace("###", "")
+             .replace("</s>", "")
+             .replace("<|im_end|>", ""))
+
+    for line in clean.strip().split("\n"):
+        stripped = line.strip()
+        if not stripped:
             continue
-        
-        upper_line = line.upper()
-        
-        # 2. Use regex to find the header and grab any text on the same line
-        if "PROBLEM EXPLANATION" in upper_line:
-            current_section = "problem_elaboration"
-            content = re.split(r'PROBLEM EXPLANATION[\-\:]*', line, flags=re.IGNORECASE)[-1].strip()
-            if content: sections[current_section] += content + " "
-            
-        elif "CORE CAUSE" in upper_line:
-            current_section = "core_cause"
-            content = re.split(r'CORE CAUSE[\-\:]*', line, flags=re.IGNORECASE)[-1].strip()
-            if content: sections[current_section] += content + " "
-            
-        elif "STEP-BY-STEP SOLUTION" in upper_line or "SOLUTION" in upper_line:
-            current_section = "solution"
-            content = re.split(r'(?:STEP-BY-STEP SOLUTION|SOLUTION)[\-\:]*', line, flags=re.IGNORECASE)[-1].strip()
-            if content: sections[current_section] += content + " "
-            
-        elif "SOURCES" in upper_line:
-            current_section = "sources"
-            
-        else:
-            # 3. Append normal lines to whatever section is currently active
-            if current_section == "sources":
-                # Clean up bullet points or numbers Mistral might add to sources
-                clean_source = re.sub(r'^[\-\*\d\.]+\s*', '', line)
-                if clean_source: 
-                    sections["sources"].append(clean_source)
-            elif current_section:
-                sections[current_section] += line + " "
 
-    # 4. Clean up trailing/leading whitespace and stray dashes
-    for key in ["problem_elaboration", "core_cause", "solution"]:
-        # .strip() removes spaces, .lstrip('-') removes leading dashes
-        sections[key] = sections[key].strip().lstrip('-').strip()
+        # Test for exact header match FIRST — strict anchoring
+        header_match = HEADER_RE.match(stripped)
+        if header_match:
+            key = header_match.group(1).upper()
+            current_section = SECTION_MAP.get(key)
+            continue  # header line itself is never content
 
-    # Fallback if the LLM completely ignored the format
-    if not sections["solution"]:
-        sections["solution"] = text.strip().lstrip('-').strip()
+        # Ignore hallucinated source lines even if parser enters them
+        if stripped.lower().startswith("source") and "---" in stripped:
+            current_section = None
+            continue
+
+        # Append content to active section
+        if current_section:
+            sections[current_section] += stripped + " "
+
+    # Final cleanup
+    for key in sections:
+        sections[key] = sections[key].strip().lstrip("-").strip()
+
+    # Safety net: if the LLM ignored the format entirely,
+    # store the raw response in solution so nothing is lost
+    if not any(sections.values()):
+        sections["solution"] = text.strip()
 
     return sections
 
-
-# ENDPOINT 1: HEALTH CHECK
 @app.get("/health")
 def health_check():
     return {
@@ -208,32 +210,15 @@ def health_check():
     }
 
 
-# ENDPOINT 2: DIAGNOSTIC QUERY
 @app.post("/diagnose", response_model=DiagnosticResponse)
-def diagnose(request: DiagnosticRequest):
-    """
-    Diagnostic endpoint following RFC Section 4 - Online query phase:
-    1. Parse & expand query (OBD code + vehicle context)
-    2. Retrieve relevant documents with metadata pre-filter
-    3. Check confidence threshold
-    4. Route to fallback or normal LLM path
-    5. Generate structured response
-    6. Return with source citations
-    """
+async def diagnose_vehicle(request: DiagnosticRequest):
 
-    # RFC STEP 1: PARSE & EXPAND QUERY
-    # Extract vehicle identity (make, model, year) and fault descriptor
-    expanded_query = expand_query_with_obd(request.query)
-    
-    print(f"\n[QUERY] make={request.make}, model={request.model}, year={request.year}")
-    print(f"[QUERY] original: {request.query}")
-    print(f"[QUERY] expanded: {expanded_query}")
+    search_query = expand_query(request.query)
 
-    # RFC STEP 2-3: RETRIEVE WITH METADATA PRE-FILTER
     try:
-        results = vector_store.similarity_search_with_relevance_scores(
-            query=expanded_query,  # Use expanded query for better retrieval
-            k=5,
+        raw_results = vector_store.similarity_search_with_relevance_scores(
+            query=search_query,
+            k=15,
             filter={
                 "$and": [
                     {"make":  {"$eq": request.make}},
@@ -242,43 +227,29 @@ def diagnose(request: DiagnosticRequest):
             }
         )
     except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Retrieval error: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"Retrieval error: {str(e)}")
 
-    # RFC STEP 4: CONFIDENCE CHECK
+    results = rerank(raw_results, request.query)
     top_score = results[0][1] if results else 0.0
-    print(f"[RETRIEVAL] Top confidence score: {top_score:.4f} (threshold: {CONFIDENCE_THRESHOLD})")
 
-    # RFC STEP 4B: FALLBACK PATH (LOW CONFIDENCE)
-    if top_score < CONFIDENCE_THRESHOLD:
-        print(f"[FALLBACK] Score {top_score:.4f} below threshold {CONFIDENCE_THRESHOLD}")
-        fallback_prompt = FALLBACK_PROMPT.format(question=request.query)
-        try:
-            fallback_text = call_llm(fallback_prompt)
-        except Exception as e:
-            raise HTTPException(
-                status_code=500,
-                detail=f"LLM error (fallback): {str(e)}"
-            )
-
+    if not results or top_score < CONFIDENCE_THRESHOLD:
         return DiagnosticResponse(
-            problem_elaboration=fallback_text.strip(),
+            problem_elaboration="No relevant documentation was found for this vehicle and fault combination.",
             core_cause="Could not be determined — no verified documentation found.",
             solution="Please consult a certified technician or the official workshop manual for your specific vehicle.",
             sources=[],
-            confidence_score=round(top_score, 4),
+            confidence_score=0.0,
             is_fallback=True
         )
 
-    # RFC STEP 4A: NORMAL PATH (HIGH CONFIDENCE)
-    print(f"[LLM] Generating response with {len(results)} context chunks")
     context_parts = []
     source_list   = []
 
-    for doc, score in results:
-        context_parts.append(doc.page_content)
+    for i, (doc, _) in enumerate(results, 1):
+        # Context: neutral label only — no file names visible to LLM
+        context_parts.append(f"[Document {i}]\n{doc.page_content}")
+
+        # Sources: built from metadata, completely independent of LLM
         source_file = doc.metadata.get("source_file", "Unknown document")
         page_number = doc.metadata.get("page_number", "?")
         section     = doc.metadata.get("section", "")
@@ -289,30 +260,28 @@ def diagnose(request: DiagnosticRequest):
             source_list.append(citation)
 
     context = "\n\n".join(context_parts)
-    
-    # RFC STEP 5: ASSEMBLE PROMPT (use original query, not expanded)
-    # This ensures LLM answers what user actually asked
-    diag_prompt  = DIAGNOSTIC_PROMPT.format(
+
+    prompt = DIAGNOSTIC_PROMPT.format(
         context=context,
         question=request.query
     )
 
-    try:
-        llm_response = call_llm(diag_prompt)
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"LLM error: {str(e)}"
-        )
 
-    # RFC STEP 6: PARSE & RETURN
-    parsed = parse_llm_response(llm_response)
+    try:
+        llm_text = call_llm(prompt)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"LLM error: {str(e)}")
+
+    parsed = parse_response(llm_text)
+
+    # Cap display score at 0.99 (boosted exact-match scores > 1.0)
+    display_score = min(round(float(top_score), 4), 0.99)
 
     return DiagnosticResponse(
         problem_elaboration=parsed["problem_elaboration"],
         core_cause=parsed["core_cause"],
         solution=parsed["solution"],
-        sources=source_list,
-        confidence_score=round(top_score, 4),
+        sources=source_list,   # from metadata
+        confidence_score=display_score,
         is_fallback=False
     )
