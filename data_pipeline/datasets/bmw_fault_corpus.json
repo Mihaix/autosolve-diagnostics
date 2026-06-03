@@ -1,0 +1,156 @@
+[
+  {
+    "content": "BMW E46 330d (M57 Engine) — Fault Code P0380: Glow Plug/Heater Circuit A Malfunction\n\nPossible Symptoms:\n• Difficult cold starting, especially in winter\n• Extended cranking time before engine fires\n• Glow plug warning light stays on or flashes\n• White/blue smoke on cold start\n• Rough idle for first few minutes after cold start\n\nPossible Causes:\n• Failed glow plug(s) — common on M57 engines after 100,000 km\n• Faulty glow plug control module (relay)\n• Corroded glow plug wiring connectors\n• Poor ground connection at engine block\n• Glow plug tip swollen/seized in cylinder head (common on high-mileage M57)\n\nDiagnostic and Repair Procedure:\n1. Test each glow plug individually with a multimeter — resistance should be 0.5-1.0 ohms\n2. Check glow plug relay operation — should click when ignition is turned to position 2\n3. Inspect wiring harness connector at each glow plug for corrosion or heat damage\n4. If glow plugs are seized, apply penetrating oil and allow to soak before removal\n5. BMW recommends replacing all 6 glow plugs simultaneously — use Beru GE100 or equivalent\n6. Torque specification for M57 glow plugs: 15 Nm (11 ft-lb)\n\nTechnical Note: The M57 engine has 6 glow plugs (one per cylinder). A single failed plug may not trigger the code — multiple plug failures are common. Always check the glow plug control module fuse (F36 in the E46 fuse box) before replacing plugs.",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "bmw_e46_m57_knowledge_base",
+      "page_number": null,
+      "section": "P0380 - Glow Plug/Heater Circuit A Malfunction"
+    }
+  },
+  {
+    "content": "BMW E46 330d (M57 Engine) — Fault Code P0100: Mass Air Flow (MAF) Sensor Circuit Malfunction\n\nPossible Symptoms:\n• Loss of power, especially under acceleration\n• Poor throttle response and turbo lag\n• Black smoke from exhaust\n• Increased fuel consumption\n• Engine enters limp mode (reduced power)\n• Rough or unstable idle\n\nPossible Causes:\n• Contaminated MAF sensor element (oil or dirt buildup)\n• Damaged MAF sensor hot-film element\n• Air leaks in intake tract between MAF and turbo inlet\n• Cracked or split intake boot/intercooler hoses\n• Faulty MAF sensor wiring or connector (corroded pins)\n• Failed MAF sensor — common failure on M57 after 80,000 km\n\nDiagnostic and Repair Procedure:\n1. Clean MAF sensor with dedicated MAF cleaner spray (do NOT use carb cleaner or contact cleaner)\n2. Inspect all intake hoses from air filter box to intercooler for cracks, splits, or loose clamps\n3. Check MAF connector for bent or corroded pins — apply dielectric grease after cleaning\n4. If cleaning does not resolve, replace MAF sensor — BMW part number 13627788744 or Bosch equivalent\n5. After replacement, clear fault codes and perform a throttle adaptation reset via diagnostic software\n6. Check for intake manifold swirl flap issues which can affect MAF readings on M57 engines\n\nTechnical Note: The M57 MAF sensor is located in the air filter housing. When replacing, ensure the new sensor arrow points in the direction of airflow. A faulty MAF can cause the DDE to miscalculate fuel injection quantities, leading to excessive smoke and poor performance.",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "bmw_e46_m57_knowledge_base",
+      "page_number": null,
+      "section": "P0100 - Mass Air Flow (MAF) Sensor Circuit Malfunction"
+    }
+  },
+  {
+    "content": "BMW E46 330d (M57 Engine) — Fault Code P0401: Exhaust Gas Recirculation (EGR) Insufficient Flow\n\nPossible Symptoms:\n• Check engine light illuminated\n• Rough idle, especially when warm\n• Loss of power at low RPM\n• Increased NOx emissions\n• Slight engine knock or pinging under load\n• Poor fuel economy\n\nPossible Causes:\n• Carbon buildup blocking EGR valve — extremely common on diesel M57 engines\n• EGR valve diaphragm failure (stuck closed)\n• Blocked or restricted EGR cooler passages\n• Vacuum hose leak or crack to EGR valve actuator\n• EGR position sensor malfunction\n• Intake manifold heavily carbonized (restricting EGR flow path)\n\nDiagnostic and Repair Procedure:\n1. Remove and clean EGR valve — soak in carb cleaner to dissolve carbon deposits\n2. Inspect EGR cooler for blockage — coolant passage should flow freely\n3. Check vacuum lines to EGR actuator for cracks or leaks — replace as needed\n4. If EGR valve is mechanically damaged, replace — BMW part number 11717804381\n5. Clean intake manifold ports and swirl flap area to restore airflow\n6. Consider EGR blanking plate as a temporary diagnostic measure (note: may not be road-legal)\n7. After repair, perform EGR adaptation reset via INPA/ISTA diagnostic software\n\nTechnical Note: The M57 engine's EGR system is known for heavy carbon buildup due to diesel combustion byproducts. Short trips and city driving accelerate this. BMW recommends periodic EGR cleaning every 60,000 km. When cleaning the EGR valve, also inspect the intake manifold swirl flaps which can seize or break.",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "bmw_e46_m57_knowledge_base",
+      "page_number": null,
+      "section": "P0401 - Exhaust Gas Recirculation (EGR) Insufficient Flow"
+    }
+  },
+  {
+    "content": "BMW E46 330d (M57 Engine) — Fault Code P0235: Turbocharger Boost Sensor A Circuit Malfunction\n\nPossible Symptoms:\n• Loss of boost pressure — reduced power/acceleration\n• Engine enters limp mode\n• Turbo whistle changes pitch or disappears\n• Excessive black smoke under load\n• Boost gauge (if fitted) reads lower than normal\n\nPossible Causes:\n• Failed boost pressure sensor (MAP sensor on intake manifold)\n• Corroded or damaged sensor connector/wiring\n• Vacuum/boost leak in intercooler hoses or intake tract\n• Faulty turbocharger wastegate actuator (sticking or seized)\n• Split intercooler end tank (common E46 failure point)\n• VNT actuator linkage binding or broken (variable nozzle turbo)\n\nDiagnostic and Repair Procedure:\n1. Check boost pressure sensor connector for corrosion — clean and apply dielectric grease\n2. Test sensor with multimeter — should read approximately 1.0V at atmospheric pressure\n3. Pressure test the entire boost system: intercooler, hoses, and connections\n4. Inspect turbo VNT mechanism for free movement — actuator rod should move smoothly\n5. Check intercooler for cracks or split end tanks — common failure at 100,000+ km\n6. If turbo wastegate is sticking, the actuator can often be rebuilt rather than replacing the entire turbo\n7. Replace boost sensor if faulty — BMW part number 13617787140\n\nTechnical Note: The M57D30 in the E46 330d uses a Garrett GT2256V variable geometry turbocharger. The VNT mechanism can stick due to carbon buildup from the EGR system. Regular highway driving helps keep the VNT mechanism clean. If boost control issues persist, check the vacuum system that controls the VNT actuator.",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "bmw_e46_m57_knowledge_base",
+      "page_number": null,
+      "section": "P0235 - Turbocharger Boost Sensor A Circuit Malfunction"
+    }
+  },
+  {
+    "content": "BMW E46 330d (M57 Engine) — Fault Code P0093: Fuel System Leak Detected — Large Leak\n\nPossible Symptoms:\n• Engine cranks but will not start or starts and immediately stalls\n• Loss of fuel rail pressure\n• Diesel fuel smell around engine bay\n• Rough running and misfiring on all cylinders\n• Engine loses power intermittently, then recovers\n\nPossible Causes:\n• Cracked or damaged fuel injector return line (plastic lines on M57 are prone to cracking)\n• Failed fuel pressure regulator on common rail\n• Leaking injector seal or copper washer\n• Damaged high-pressure fuel pump (CP1 or CP3)\n• Cracked fuel rail\n• Fuel filter housing seal leak\n• Fuel line connections loose or corroded\n\nDiagnostic and Repair Procedure:\n1. Inspect all fuel injector return lines — the plastic return lines on the M57 become brittle with age and are the most common cause\n2. Replace all injector return lines as a set — BMW part number 13537787537 (set)\n3. Check copper injector sealing washers — replace if flattened or corroded\n4. Inspect fuel pressure regulator for external leaks\n5. Check fuel rail pressure with diagnostic tool — should hold 250-300 bar at idle, 1350+ bar under load\n6. Inspect fuel filter housing O-ring seal — replace if swollen or damaged\n7. Use a fuel pressure gauge to isolate the leak location systematically\n\nTechnical Note: The M57 common rail system operates at extremely high pressure (up to 1350 bar). NEVER attempt to loosen high-pressure fuel lines while the engine is running. The plastic fuel injector return lines are the #1 failure point and should be replaced as preventive maintenance on any M57 with over 100,000 km.",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "bmw_e46_m57_knowledge_base",
+      "page_number": null,
+      "section": "P0093 - Fuel System Leak Detected — Large Leak"
+    }
+  },
+  {
+    "content": "BMW E46 330d (M57 Engine) — Fault Code P0299: Turbocharger/Supercharger Underboost Condition\n\nPossible Symptoms:\n• Noticeable power loss, especially during acceleration\n• Engine enters limp mode (power reduced warning)\n• Slow turbo spool-up / excessive turbo lag\n• Maximum speed limited to approximately 100 km/h in limp mode\n• Possible whistling or hissing noise from engine bay\n\nPossible Causes:\n• Boost leak in intercooler piping, hoses, or clamps\n• Turbocharger VNT mechanism sticking (carbon buildup)\n• Torn or split turbo intake hose\n• Wastegate actuator vacuum line disconnected or cracked\n• Worn turbocharger shaft bearings (excessive play)\n• EGR system fault causing exhaust gas recirculation issues\n• Blocked catalytic converter or DPF creating excessive exhaust backpressure\n\nDiagnostic and Repair Procedure:\n1. Perform a boost leak test on the entire intake and intercooler system — pressurize to 1.5 bar and listen for leaks\n2. Remove and inspect turbocharger VNT actuator linkage — should move freely through full range\n3. Clean VNT mechanism if accessible — use appropriate diesel-safe solvents\n4. Check all intercooler hoses and clamps — tighten or replace as needed\n5. Inspect turbo for shaft play: lateral play should not exceed 0.05mm, axial play should not exceed 0.10mm\n6. If turbo bearings are worn, turbo rebuild or replacement is required\n7. Check exhaust backpressure — excessive pressure indicates blocked DPF or catalytic converter\n\nTechnical Note: Underboost on the M57 is frequently caused by the VNT mechanism sticking in the open position due to carbon deposits from the EGR system. An Italian tune-up (sustained high-RPM driving) can sometimes temporarily free a sticking VNT. For a permanent fix, the turbo may need to be removed for VNT cleaning or the actuator may need replacement.",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "bmw_e46_m57_knowledge_base",
+      "page_number": null,
+      "section": "P0299 - Turbocharger/Supercharger Underboost Condition"
+    }
+  },
+  {
+    "content": "BMW E46 330d (M57 Engine) — Fault Code P0335: Crankshaft Position Sensor A Circuit Malfunction\n\nPossible Symptoms:\n• Engine cranks but does not start\n• Intermittent stalling while driving\n• Rough running and misfiring\n• Tachometer fluctuates or drops to zero intermittently\n• Loss of power with possible limp mode activation\n\nPossible Causes:\n• Failed crankshaft position sensor (CKP sensor) — common failure on M57 after 120,000+ km\n• Damaged sensor wiring harness (heat damage from proximity to exhaust)\n• Corroded CKP sensor connector\n• Excessive gap between sensor and reluctor ring on flywheel/flexplate\n• Cracked or damaged reluctor ring teeth\n• Oil contamination on sensor tip\n\nDiagnostic and Repair Procedure:\n1. The CKP sensor on the M57 is located on the lower rear of the engine block, near the flywheel\n2. Remove and inspect the sensor tip for metal debris, oil contamination, or physical damage\n3. Check sensor resistance — should measure 800-1400 ohms at room temperature\n4. Inspect wiring harness for heat damage — the exhaust proximity can melt insulation\n5. Replace sensor — BMW part number 13627789098 or Bosch equivalent\n6. Ensure correct installation gap — sensor should sit flush against the mounting surface\n7. After replacement, clear codes and test start. No adaptation needed for CKP sensor.\n\nTechnical Note: A failing CKP sensor on the M57 often exhibits intermittent symptoms — the engine may run fine for days, then suddenly stall or refuse to start. This is because the sensor can be heat-sensitive, failing only when hot. If intermittent no-start is experienced, try cooling the sensor area with water or compressed air — if the engine then starts, the CKP sensor is confirmed faulty.",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "bmw_e46_m57_knowledge_base",
+      "page_number": null,
+      "section": "P0335 - Crankshaft Position Sensor A Circuit Malfunction"
+    }
+  },
+  {
+    "content": "BMW E46 330d (M57 Engine) — Fault Code P0171: System Too Lean — Bank 1\n\nPossible Symptoms:\n• Rough idle\n• Hesitation during acceleration\n• Increased fuel consumption\n• Black or white exhaust smoke\n• Engine misfiring under load\n\nPossible Causes:\n• Vacuum leak in intake manifold or associated hoses\n• Faulty MAF sensor reading incorrect air mass\n• Clogged fuel filter restricting fuel delivery\n• Weak fuel pump unable to maintain rail pressure\n• Leaking fuel injector(s)\n• EGR valve stuck open (excess exhaust gas diluting intake charge)\n• Cracked intake manifold (common on plastic intake manifolds)\n\nDiagnostic and Repair Procedure:\n1. Check for intake/vacuum leaks using smoke testing or carb cleaner spray method\n2. Inspect and test MAF sensor — clean or replace if faulty\n3. Replace fuel filter — BMW recommends every 30,000 km for diesel engines\n4. Check fuel rail pressure with diagnostic tool — should be 250-300 bar at idle\n5. Test injector return quantities — maximum 50ml per minute at idle per injector\n6. Inspect EGR valve operation — clean or replace as needed\n7. Check intake manifold for cracks, especially around the swirl flap area\n\nTechnical Note: On the M57 diesel engine, 'System Too Lean' typically relates to air-fuel ratio issues detected by the lambda sensor. Unlike petrol engines, diesel lean conditions are often caused by insufficient fuel delivery rather than excess air. Always check fuel system components first.",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "bmw_e46_m57_knowledge_base",
+      "page_number": null,
+      "section": "P0171 - System Too Lean — Bank 1"
+    }
+  },
+  {
+    "content": "BMW E46 330d (M57 Engine) — Fault Code P0420: Catalyst System Efficiency Below Threshold — Bank 1\n\nPossible Symptoms:\n• Check engine light (MIL) illuminated\n• Slight sulphur/rotten egg smell from exhaust\n• Reduced engine performance in some cases\n• May fail emissions testing\n• Usually no drivability symptoms in early stages\n\nPossible Causes:\n• Catalytic converter substrate degraded or contaminated\n• Oil burning entering exhaust system (worn valve stem seals or piston rings)\n• Use of incorrect or contaminated fuel\n• Exhaust leaks before the catalytic converter (false readings)\n• Failed downstream oxygen/lambda sensor giving false efficiency readings\n• Engine misfiring causing unburned fuel to damage catalyst\n• DPF regeneration issues causing excessive exhaust temperatures\n\nDiagnostic and Repair Procedure:\n1. First verify the fault — check both upstream and downstream lambda sensor operation with live data\n2. Inspect exhaust system for leaks between engine and catalytic converter\n3. Test downstream lambda sensor separately — replace if it shows no switching activity\n4. If catalyst is confirmed failed, replacement is required\n5. BMW OEM catalytic converter part number varies by production date — consult ETK\n6. After replacement, clear codes and perform at least 3 complete drive cycles for readiness monitors\n7. Address root cause (oil burning, misfires) before replacing catalyst to prevent repeat failure\n\nTechnical Note: On the M57 diesel, this code is less common than on petrol engines. When it does appear, it is often caused by downstream sensor degradation rather than actual catalyst failure. Always verify sensor operation before condemning the catalytic converter. The E46 330d uses a close-coupled pre-catalyst followed by a main underfloor catalyst.",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "bmw_e46_m57_knowledge_base",
+      "page_number": null,
+      "section": "P0420 - Catalyst System Efficiency Below Threshold — Bank 1"
+    }
+  },
+  {
+    "content": "BMW E46 330d (M57 Engine) — Fault Code P0480: Cooling Fan 1 Control Circuit Malfunction\n\nPossible Symptoms:\n• Engine overheating, especially in traffic or at low speeds\n• Cooling fan does not activate or runs constantly\n• A/C system underperforming (condenser fan shared with engine cooling)\n• Coolant temperature warning on dashboard\n• Automatic transmission may overheat (shared cooling circuit)\n\nPossible Causes:\n• Failed auxiliary cooling fan motor — common E46 failure due to brush wear\n• Blown fan relay or fuse\n• Faulty fan control module (final stage resistor)\n• Coolant temperature sensor sending incorrect signal to DDE\n• Damaged wiring to fan motor connector\n• Failed fan clutch (on viscous-coupled main fan, if equipped)\n\nDiagnostic and Repair Procedure:\n1. Check fan fuse in engine bay fuse box — replace if blown\n2. Test fan motor directly with 12V supply — motor should spin freely\n3. Inspect fan relay in fuse box — swap with identical relay to test\n4. Check coolant temperature sensor readings with diagnostic tool — should match actual temp\n5. Inspect wiring to fan motor for corrosion or damage, especially at the connector\n6. Replace auxiliary fan motor — BMW part number 64546988913\n7. If viscous fan clutch is faulty, replace — BMW part number 11527505302\n8. Always replace the fan clutch with the water pump during preventive maintenance\n\nTechnical Note: The E46 cooling system is notoriously problematic. When addressing this code, it is strongly recommended to inspect the entire cooling system: expansion tank (cracks common), water pump (plastic impeller failure), thermostat (sticking open/closed), and all coolant hoses. BMW recommends replacing the expansion tank, thermostat, and water pump together as preventive maintenance at 100,000 km.",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "bmw_e46_m57_knowledge_base",
+      "page_number": null,
+      "section": "P0480 - Cooling Fan 1 Control Circuit Malfunction"
+    }
+  },
+  {
+    "content": "BMW E46 330d (M57 Engine) — Fault Code P0128: Coolant Thermostat — Coolant Temperature Below Thermostat Regulating Temperature\n\nPossible Symptoms:\n• Engine takes excessively long to reach operating temperature\n• Heater output is poor or lukewarm\n• Fuel consumption increased (engine running in cold enrichment mode too long)\n• Temperature gauge stays below normal operating range\n• DPF regeneration may not complete properly\n\nPossible Causes:\n• Thermostat stuck in the open position — very common on E46 after 80,000 km\n• Coolant temperature sensor reading inaccurately\n• Thermostat housing cracked or leaking (allows coolant bypass)\n• Air trapped in cooling system preventing proper thermostat operation\n• Wrong thermostat specification installed (incorrect opening temperature)\n\nDiagnostic and Repair Procedure:\n1. Replace thermostat — the E46 M57 uses a map-controlled thermostat (electrically heated)\n2. BMW part number 11537509227 for M57 thermostat assembly\n3. When replacing, also replace the thermostat housing O-ring and gasket\n4. Bleed the cooling system thoroughly after replacement — E46 is notoriously difficult to bleed\n5. Use BMW's bleeder screw on top of the thermostat housing to purge air\n6. Verify coolant temperature sensor accuracy after thermostat replacement\n7. Normal operating temperature for the M57 should be 90-105°C depending on load\n\nTechnical Note: The M57's map-controlled thermostat is electrically heated by the DDE to optimize warm-up time and operating temperature based on driving conditions. Unlike a traditional wax thermostat, failure of the electrical heating element can also cause this code. Always use an OEM-specification thermostat — aftermarket units with incorrect opening temperatures will cause ongoing issues.",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "bmw_e46_m57_knowledge_base",
+      "page_number": null,
+      "section": "P0128 - Coolant Thermostat — Coolant Temperature Below Thermostat Regulating Temperature"
+    }
+  },
+  {
+    "content": "BMW E46 330d (M57 Engine) — Fault Code P0201: Injector Circuit Malfunction — Cylinder 1\n\nPossible Symptoms:\n• Engine misfiring on one cylinder\n• Rough idle with noticeable vibration\n• Loss of power — engine running on 5 cylinders\n• Knocking or diesel clatter from affected cylinder\n• Excessive smoke (white or black depending on failure mode)\n\nPossible Causes:\n• Failed fuel injector — common rail piezo injector failure on M57\n• Injector wiring harness damaged or corroded\n• Injector connector pin corrosion or poor contact\n• DDE (engine ECU) injector driver circuit failure\n• Injector coding lost in ECU (requires recoding after replacement)\n\nDiagnostic and Repair Procedure:\n1. Read injector correction values (IMA values) with diagnostic tool — values exceeding ±3 mg/stroke indicate a failing injector\n2. Perform an injector back-leak test — maximum 50ml per minute at idle (700 RPM)\n3. Check injector wiring harness — inspect for heat damage, oil contamination, or frayed wires\n4. Test injector resistance — should measure 0.3-1.0 ohms depending on type\n5. If injector replacement is needed, always replace the copper sealing washer and hold-down bolt\n6. Injector torque specification: 9 Nm for the hold-down bolt (M57)\n7. After replacement, the new injector correction code (IMA) must be programmed into the DDE via ISTA/INPA\n8. BMW part number for M57 injectors varies by production date — verify via last 7 digits of VIN\n\nTechnical Note: The M57 uses Bosch common rail piezo injectors. These injectors have an IMA (injector trim) correction value printed on each injector body. This 6-digit code MUST be programmed into the DDE after any injector replacement — failure to do so will cause rough running, incorrect fueling, and potential DPF issues. This code (P0201) is for Cylinder 1; P0202-P0206 indicate Cylinders 2-6 respectively.",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "bmw_e46_m57_knowledge_base",
+      "page_number": null,
+      "section": "P0201 - Injector Circuit Malfunction — Cylinder 1"
+    }
+  },
+  {
+    "content": "BMW E46 330d (M57 Engine) — Fault Code P0116: Engine Coolant Temperature Circuit Range/Performance\n\nPossible Symptoms:\n• Inaccurate temperature gauge readings\n• Engine fan running at incorrect times (too early or too late)\n• Poor heater performance\n• Engine management light illuminated\n• Cold start issues — incorrect fueling based on wrong temperature reading\n\nPossible Causes:\n• Failed coolant temperature sensor (CTS) — common age-related failure\n• Corroded CTS connector (exposed to coolant leaks and engine bay moisture)\n• Wiring fault between CTS and DDE module\n• Low coolant level causing sensor to read air instead of coolant\n• Air pocket trapped around the sensor location\n\nDiagnostic and Repair Procedure:\n1. Locate the CTS — on the M57, it is on the cylinder head near the thermostat housing\n2. Check coolant level first — low level can cause erratic sensor readings\n3. Read live data with diagnostic tool — compare CTS reading vs. actual temperature (infrared thermometer)\n4. Inspect connector for green/white corrosion — clean with electrical contact cleaner\n5. Test sensor resistance: approximately 2.5 kΩ at 20°C, 300Ω at 80°C\n6. Replace CTS — BMW part number 13621433077\n7. Top off and bleed cooling system after any work near the thermostat area\n\nTechnical Note: The M57 has two coolant temperature sensors — one for the gauge cluster and one for the DDE engine management. This P-code refers to the DDE sensor. If only the gauge is reading incorrectly but the engine runs fine, the gauge sensor (different part) may be at fault instead.",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "bmw_e46_m57_knowledge_base",
+      "page_number": null,
+      "section": "P0116 - Engine Coolant Temperature Circuit Range/Performance"
+    }
+  },
+  {
+    "content": "BMW E46 330d (M57 Engine) — Fault Code P2002: Diesel Particulate Filter Efficiency Below Threshold — Bank 1\n\nPossible Symptoms:\n• DPF warning light illuminated on dashboard\n• Reduced engine power / limp mode\n• Increased exhaust smoke\n• Strong exhaust smell\n• Frequent attempted regeneration cycles (higher idle RPM, cooling fan running at standstill)\n• Fuel economy significantly worsened\n\nPossible Causes:\n• DPF fully loaded with soot beyond regeneration capacity\n• Failed DPF pressure differential sensor\n• Exhaust temperature sensor fault preventing regeneration\n• Frequent short journeys preventing passive regeneration from completing\n• Faulty injector(s) causing incomplete combustion and excessive soot\n• EGR system fault increasing soot production\n• DPF substrate cracked or melted from excessive regeneration temperatures\n\nDiagnostic and Repair Procedure:\n1. Read DPF soot loading level with diagnostic tool — if below 45g, a forced regeneration may clear it\n2. Perform forced regeneration via INPA/ISTA (engine must be at operating temperature, vehicle stationary)\n3. If forced regeneration fails, professional DPF cleaning (chemical flush or thermal cleaning) may be required\n4. Check DPF differential pressure sensor — should read 0 mbar with engine off, rising with soot load\n5. Inspect all exhaust temperature sensors — the M57 has sensors before and after the DPF\n6. Address root cause of excessive soot: injectors, EGR, MAF, turbo condition\n7. If DPF is physically damaged (cracked substrate), replacement is required\n8. BMW part number for E46 330d DPF varies — consult dealer with VIN\n\nTechnical Note: Not all E46 330d models were equipped with a DPF — it depends on the production date and market. Pre-2004 EU3 models typically do not have a DPF. If your vehicle has a DPF, regular highway driving (30+ minutes at 2500+ RPM) is essential for passive regeneration. Vehicles used exclusively for short city trips will inevitably accumulate excessive soot.",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "bmw_e46_m57_knowledge_base",
+      "page_number": null,
+      "section": "P2002 - Diesel Particulate Filter Efficiency Below Threshold — Bank 1"
+    }
+  }
+]

@@ -1,0 +1,167 @@
+[
+  {
+    "content": "Introduction\nM57TU1-TOP Engine\nDiesel engine with two-stage supercharging\nThe most powerful diesel engine used in the\nE60 will be the M57D30TU1-TOP (model\ndesignation 535d).\nThe engine is characterized by outstanding\npower output characteristics. The power\noutput is 200 kW/272 bhp. The maximum\ntorque of 560 Nm is developed at 2000 rpm.\nA torque of 500 Nm is available at an engine\nspeed of 1500 rpm.\nChanges\nCompared to the M57TU1-EURO 4 engine,\nthe following changes and new developments\nhave been implemented on the following\ncomponents:\n• Exhaust turbocharger\n• Exhaust system\n• Intake air control\n• Pistons and connecting rods\n• Camshafts\n• Belt drive\n• Reduced compression ratio\n• Increased fuel injector cross section\n• Digital diesel electronics DDE 606\n1 - Comparison between M57TU1-EURO 4 and M57TU1-TOP",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "BMW Service.pdf",
+      "page_number": 9,
+      "section": "Introduction"
+    }
+  },
+  {
+    "content": "Technical data\nEngine number\nThe engine number is located on the engine\nblock above the engine oil cooler.\nDescription\nM57D30 TU1 EURO 4\nM57D30 TU1 TOP\nType\n6-cylinder in-line engine\n6-cylinder in-line engine\nDisplacement (cm3)\nStroke/bore (mm)\n90/84\n90/84\nOutput (kW/bhp)\nat engine speed (rpm)\n160/218\n200/272\nTorque (Nm)\nat engine speed (rpm)\n2000-2750\n2000-2250\nGoverned cutoff speed (rpm)\nCompression ratio\n17.0\n16.5\nValves/cylinder\nDigital diesel electronics\nDDE 509\nDDE 606\nCompliant with exhaust emission\nrequirement\nEURO 4\nEURO 4\nExhaust gas treatment\nOxidation catalytic\nconverter and\ndiesel particle filter\nOxidation catalytic\nconverter and\ndiesel particle filter\n2 - Item 1: Engine oil cooler",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "BMW Service.pdf",
+      "page_number": 10,
+      "section": "Technical data"
+    }
+  },
+  {
+    "content": "History\nTo date, the M57D30TU engine has been\ninstalled in the following model series:\nEngine\n Series\nkW/bhp at\nrpm\nNm at/rpm\nExhaust\nemission\nstage\nEngine\ncontrol\nM57D30 TU\nE46\n150/204\n1500-3250\nLHD =\nEURO3\nRHD =\nEURO3\nDDE 5.0\nM57D30 TU1\nE46\n150/204\n1500-3250\nLHD =\nEURO4\nRHD =\nEURO4\nDDE 506\nM57D30 TU1\nE83\n150/204\n1500-3250\nLHD =\nEURO3\nRHD = ---\nDDE 506\nM57D30 TU\nE53\n160/218\n2000-2750\nLHD =\nEURO3\nRHD =\nEURO3\nDDE 506\nM57D30 TU\nE65\n160/218\n2000-2750\nLHD =\nEURO3\nRHD =\nEURO3\nDDE 506\nM57D30 TU1\nE60\n160/218\n2000-2750\nLHD =\nEURO3\nRHD =\nEURO3\nDDE 508\nM57D30 TU1\nEURO 4\nE60\n160/218\n2000-2750\nLHD =\nEURO4\nRHD =\nEURO4\nDDE 509\nM57D30 TU1\nTOP\nE 60\n(as from\n09/04)\n200/272\n2000-2250\nLHD =\nEURO4\nRHD =\nEURO4\nDDE 606\nLHD = Left-hand drive\nRHD = Right-hand drive",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "BMW Service.pdf",
+      "page_number": 11,
+      "section": "History"
+    }
+  },
+  {
+    "content": "System components\nM57TU1-TOP Engine\nModified components\nExhaust turbocharger\nTwo-stage turbocharging solves the conflict\nof interest between response at low engine\nspeeds and the availability of high power\nreserves during motorway driving.\nTwo series-connected turbochargers are\nused. A small turbocharger for the high\npressure stage and a larger turbocharger for\nthe low pressure stage. Both turbochargers\nhave a rigid turbine geometry without\nadjustable turbine blades.\nThe smaller exhaust turbocharger (high\npressure stage) develops high torque and\ngood response characteristics (t) at low engine\nspeeds. The larger exhaust turbocharger (low\npressure stage) is responsible for high engine\npower output (P).\nThe max. boost pressure of the overall system\nis 2.85 bar (M57TU = max. 2.5 bar). The\nturbine speeds are max. 230,000 rpm for the\nhigh pressure stage and max. 170,000 rpm in\nthe low pressure stage.\nA flexible combination of both turbochargers is\npossible. Components both on the exhaust\nand air intake sides control the variable\ninteraction of both exhaust turbochargers:\n• Turbine control valve (exhaust side)\n• Compressor bypass valve (air side)\n• Wastegate (exhaust side)\n1 - Advantages of two-stage turbocharging\nIndex\nDescription\nP\nEngine output\nt\nResponse characteristic",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "BMW Service.pdf",
+      "page_number": 13,
+      "section": "System components"
+    }
+  },
+  {
+    "content": "Exhaust system\nThe exhaust system has been adapted to the\nhigher volumetric throughput of the M57TU1-\nTOP engine compared to the M57TU1\nengine.\nFor this purpose, the exhaust system is\ndesigned as a dual-flow system between the\ndiesel particle filter and the rear silencer.\nIntake air control\nThe near-engine arrangement of the intake\nsilencer is no longer possible due to the\nincreased demand for space for the exhaust\nturbochargers and due to the higher air intake\nrequirement of the M57TU1-TOP engine.\nThe intake silencer together with the air\ncleaner has therefore been relocated from the\nengine to the right-hand wheel arch.\n3 - Intake air control\nIndex\nDescription\nIndex Description\nIntake snorkel\nLine to engine breather\nHot-film air mass meter\nFiltered air gaiter",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "BMW Service.pdf",
+      "page_number": 15,
+      "section": "Exhaust system"
+    }
+  },
+  {
+    "content": "Pistons and connecting rods\nThe connecting rods are trapezoidal in the\narea of the upper connecting rod eye. Due to\nthe trapezoidal shape, it has been possible to\nmake the bearing half on the rod side of the\nupper connecting rod eye wider, providing\nmore favourable force input conditions. The\ncracked connecting rod is made from forged\nsteel. The pistons have been adapted to the\ntrapezoidal shape of the connecting rod. The\ngeometry of the piston crown bowl has been\nslightly modified to adapt to the modified\npower output and exhaust requirements.\nCamshafts\nBuilt-in camshafts are used. The non-\nseparable drive gear is connected to the\ncamshaft. Compared to the previous\ncamshafts made of clear chill casting, the\nbuilt-in camshafts offer a considerable weight\nadvantage.\nBelt drive\nA 6 ribbed V-belt assembly with\na mechanical tensioning pulley is used for the\nmain drive. The A/C compressor is driven by\nan Elast-belt. The Elast-belt (4-ribbed belt) is\nself-tensioning. It is fitted with a special tool as\npart of servicing operations. No other\ntensioning facility is provided on the engine.",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "BMW Service.pdf",
+      "page_number": 16,
+      "section": "Pistons and connecting rods"
+    }
+  },
+  {
+    "content": "Turbine control valve\nThe turbine control valve (4) routes the\nexhaust gas through the bypass duct past the\nhigh pressure stage (2) to the low pressure\nstage (3). It is operated pneumatically by a\ndiaphragm unit and can be variably adjusted.\nAn electropneumatic pressure converter (high\nspeed EPDW) applies vacuum to the\ndiaphragm unit.\nCompressor bypass valve\nThe compressor bypass valve (12) controls\nthe bypass of the high pressure stage (2) on\nthe air intake side. It is operated pneumatically\nby a diaphragm unit. The compressor bypass\nvalve is either fully opened or completely\nclosed.\nAn electric changeover valve (EUV) applies\nvacuum to the diaphragm unit.\nWastegate\nOn reaching the nominal engine output, the\nwastegate (5) opens to avoid high boost and\nturbine pressures.\nA part of the exhaust gas flows via the tailgate\npast the turbine of the low pressure stage (3).\nIt is operated pneumatically by a diaphragm\nunit. The wastegate can be variable adjusted.\nAn electropneumatic pressure converter\n(EPDW) applies vacuum to the diaphragm unit.\nIndex\nDescription\nIndex Description\nM57TU1-TOP engine\nHot-film air mass meter (HFM)\nExhaust turbocharger (high\npressure stage)\nDigital diesel electronics (DDE)\nExhaust turbocharger (low pressure\nstage)\nCompressor bypass valve with electric\nchangeover valve (EUV)\nTurbine control valve with\nelectropneumatic pressure\nconverter (EPDW)\nIntake air temperature sensor\nWastegate with electropneumatic\npressure converter (EPDW)\nIntercooler\nOxidation catalytic converter\nExhaust gas recirculation (EGR valve)\nDiesel particle filter\nThrottle valve\nRear silencer\nEGR cooler\nIntake silencer (AGD) with air\ncleaner\nBoost pressure sensor",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "BMW Service.pdf",
+      "page_number": 18,
+      "section": "Turbine control valve"
+    }
+  },
+  {
+    "content": "Switching points\nThe DDE controls the supercharging\ndependent on the engine load and speed. The\nswitching points stored in a characteristic map\ntake place in a smooth transition (hysteresis).\nThe following illustrations show the functions\nof the two-stage turbocharging system at full\nload:\nLower engine speed range\n(up to 1500 rpm)\nThe turbine wheels of the high pressure and\nlow pressure stages (6+7) are driven by\nexhaust gas. The engine is supercharged\nprimarily by the high pressure stage (7).\n2 - Supercharging function at engine speeds up to 1500 rpm\nIndex\nDescription\nM57TU1-TOP engine\nTurbine control valve with\nelectropneumatic pressure\nconverter (EPDW)\nWastegate with electropneumatic\npressure converter (EPDW)\nExhaust gas, to exhaust system\nFresh air, from air cleaner\nExhaust turbocharger (low pressure\nstage)\nExhaust turbocharger (high\npressure stage)\nCompressor bypass valve with\nelectric changeover valve (EUV)\nIntercooler",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "BMW Service.pdf",
+      "page_number": 19,
+      "section": "Switching points"
+    }
+  },
+  {
+    "content": "Medium engine speed range\n(from 1500 to 3250 rpm)\nThe turbine control valve (2) opens\ncontinuously as the engine speed increases.\nConsequently, the flow of exhaust gas\nincreasingly bypasses the turbine wheel of the\nhigh pressure stage (7). As the engine speed\nincreases, the engine is supercharged more\nand more by the low pressure stage (6).\nUpper engine speed range\n(from 3250 to 4200 rpm)\nThe turbine control valve (2) is completely\nopen. The flow of exhaust gas largely\nbypasses the turbine wheel of the high\npressure stage (7). The compressor bypass\nvalve (8) is open. The engine is supercharged\nonly by the low pressure stage (6).\n3 - Supercharging function at engine speeds from 1500 to 3250 rpm\nIndex\nDescription\nM57TU1-TOP engine\nTurbine control valve with\nelectropneumatic pressure\nconverter (EPDW)\nWastegate with electropneumatic\npressure converter (EPDW)\nExhaust gas, to exhaust system\nFresh air, from air cleaner\nExhaust turbocharger (low pressure\nstage)\nExhaust turbocharger (high\npressure stage)\nCompressor bypass valve with\nelectric changeover valve (EUV)\nIntercooler\n4 - Supercharging function at engine speeds from 3250 to 4200 rpm",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "BMW Service.pdf",
+      "page_number": 20,
+      "section": "Medium engine speed range"
+    }
+  },
+  {
+    "content": "Nominal output range\n(as from 4200 rpm)\nThe engine is supercharged by the low\npressure stage (6). The wastegate (3) opens\nas the engine speed increases. A part of the\nexhaust gas therefore bypasses the turbine\nwheel of the low pressure stage, thus limiting\nthe turbine speed.\n5 - Supercharging function at engine speeds as from 4200 rpm\nIndex\nDescription\nM57TU1-TOP engine\nTurbine control valve with\nelectropneumatic pressure\nconverter (EPDW)\nWastegate with electropneumatic\npressure converter (EPDW)\nExhaust gas, to exhaust system\nFresh air, from air cleaner\nExhaust turbocharger (low pressure\nstage)\nExhaust turbocharger (high\npressure stage)\nCompressor bypass valve with\nelectric changeover valve (EUV)\nIntercooler",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "BMW Service.pdf",
+      "page_number": 21,
+      "section": "Nominal output range"
+    }
+  },
+  {
+    "content": "Vacuum system\nThe vacuum is routed from the vacuum pump\n(1) via a distributor to the near-engine vacuum\naccumulator (3). From the vacuum\naccumulator, the vacuum is applied to both\nelectropneumatic pressure converters\n(EPDW) (5+6) and to the electric changeover\nvalve (EUV) (4).\n6 - Overview of vacuum system M57TU-TOP\nIndex\nDescription\nIndex\nDescription\nVacuum pump\nDiaphragm unit for turbine control valve\nThrottle\nDiaphragm unit for wastegate\nVacuum accumulator\nBrake booster\nElectric changeover valve (EUV) for\ncompressor bypass valve\nElectric changeover valve (EUV) for\nengine mount control\nElectropneumatic pressure\nconverter (EPDW) for turbine\ncontrol valve\nElectric changeover valve (EUV) for\nswirl flaps in intake system\nElectropneumatic pressure\nconverter (EPDW) for wastegate\nElectropneumatic pressure converter\n(EPDW) for EGR valve\nDiaphragm unit for compressor\nbypass valve\n---",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "BMW Service.pdf",
+      "page_number": 22,
+      "section": "Vacuum system"
+    }
+  },
+  {
+    "content": "The colour coding and the different hose\nlengths ensures the hoses cannot be\ninterchanged at the vacuum units.\nBlack braided-sheath hoses are used for the\nsupply lines from the vacuum pump to the\nsolenoid valves (EUV and EPDW) and to the\nvacuum accumulator. Colour-coded braided-\nsheath hoses are used for the controlled\nsupply lines:\nNevertheless, should the vacuum hoses be\nconfused, the result will be an acute loss of\npower.\n3 A distributor with four connections is\nconnected in the vacuum line at the vacuum\npump (1). Three of the connections feature a\n∅0.8 mm throttle (2). Only the connection to\nthe electric changeover valves for the engine\nmounts and swirl flaps (11+12) has a\n∅0.5 mm throttle. To avoid confusion, this\nconnection is shorter than the other three. 1\nComponent\nIdentification\nTurbine\ncontrol valve\nShort, blue braided-sheath\nhose\nWastegate\nLong, blue braided-sheath\nhose\nCompressor\nbypass valve\nBlack braided-sheath hose\nwith red stripes",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "BMW Service.pdf",
+      "page_number": 23,
+      "section": "Component"
+    }
+  },
+  {
+    "content": "Introduction\nDigital Diesel Electronics\nDDE 606\nThe DDE 606 is used in connection with the\nM57TU1-TOP engine.\nChanges\nCompared to the DDE 509 system (M57 TU1\nEURO 4), the following actuators have been\nadded for the two-stage supercharging:\n• Electropneumatic pressure converter\n(EPDW) for turbine control valve\n• Electropneumatic pressure converter\n(EPDW) for wastegate\n• Electric changeover valve (EUV) for\ncompressor bypass valve\nPerformance data:\n• Clock frequency: 56 MHz (DDE 509: 40\nMHz)\n• EEPROM: 8 kB (DDE 509: 2 kB)\n• RAM: 32 kB (DDE 509: 32 kB)\nThere is no air flap control (LKS) on the E60\nwith the M57TU1-TOP engine.\nHistory\nThe following engine control systems are\nused for the M57TU engine:\nSeries\nEngine\nEngine\ncontrol\nE46\nM57D30 TU\nDDE 506\nE83\nM57D30 TU\nDDE 506\nE53\nM57D30 TU\nDDE 506\nE65\nM57D30 TU\nDDE 506\nE60\nM57D30 TU1\nDDE 508\nE60\nM57D30 TU1\nEURO 4\nDDE 509\nE60\n(as from\n09/04)\nM57D30 TU1\nTOP\nDDE 606",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "BMW Service.pdf",
+      "page_number": 27,
+      "section": "Introduction"
+    }
+  },
+  {
+    "content": "Index\nDescription\nIndex Description\nDigital diesel electronics\n22-27 Fuel injectors\nAmbient pressure sensor in control\nunit\nRail pressure sensor\nTemperature sensor in control unit\nFuel temperature sensor\nDDE main relay\nExhaust gas temperature sensor 1\nE-box fan\nExhaust gas temperature sensor 2\nStarting relay with starter\nExhaust pressure sensor\nAuxiliary heater\nIntake air temperature sensor\n8-9\nElectric fan and electric fan control\nCoolant temperature sensor\nThrottle valve actuator\nBoost pressure sensor\nCamshaft position sensor\nCrankshaft position sensor (KWG)\nHot-film air mass meter (HFM)\nOil pressure switch\nElectric changeover valve (EUV) for\nengine mount control\nPreheating control unit\nElectropneumatic pressure\nconverter (EPDW) for exhaust gas\nrecirculation (EGR)\nThermal oil level sensor\nElectropneumatic pressure\nconverter (EPDW) for turbine\ncontrol valve\nAccelerator pedal module (FPM)\nElectropneumatic pressure\nconverter (EPDW) for wastegate\nAlternator\nElectric changeover valve (EUV) for\ncompressor bypass valve\nDiagnosis line for fuel filter heating\nElectric changeover valve (EUV) for\nswirl flaps\nCar access system (CAS)\nRail pressure control valve\nBrake light switch\nVolume control valve\nOn-board diagnostics socket\nBroadband oxygen sensor (LSU\n4.9)\nGround connection",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "BMW Service.pdf",
+      "page_number": 30,
+      "section": "Index"
+    }
+  },
+  {
+    "content": "System components\nDigital diesel electronics\nSensors/actuators\nSensors\n• Accelerator pedal module\n• Hot-film air mass meter (HFM)\n• Boost pressure sensor\n• Coolant temperature sensor\n• Fuel temperature sensor\n• Rail pressure sensor\n• Charge air temperature sensor\n• Camshaft position sensor (NWG)\n• Thermal oil level sensor (TÖNS)\n• Crankshaft position sensor (KWG)\n• Exhaust pressure sensor\n• Exhaust gas temperature sensor upstream\nof oxidation catalytic converter\n• Exhaust gas temperature sensor upstream\nof diesel particle filter (DPF)\n• Oxygen sensor (Bosch LSU 4.9 with\nconstant characteristic)\nActuators\n• Fuel injectors 1-6\n• Volume control valve\n• Pressure control valve\n• Electric changeover valve (EUV) for exhaust\ngas recirculation\n• Electric changeover valve (EUV) for swirl\nflaps\n• Electric changeover valve (EUV) for engine\nmounts\n• E-box fan\n• Electric motor throttle valve actuator\n• Electropneumatic pressure converter\n(EPDW) for turbine control valve\n• Electropneumatic pressure converter\n(EPDW) for wastegate\n• Electric changeover valve (EUV) for\ncompressor bypass valve\nSwitches\n• Brake light switch/brake light test switch\n• Oil pressure switch\n• Clutch switch\nRelays\n• DDE main relay\n• Starter relay\nInterfaces\n• Bit-serial data interface BSD (alternator,\npreheating control unit)\n• PT-CAN\nElectropneumatic pressure converter (EPDW)\nElectropneumatic pressure converters\n(EPDW) apply vacuum to the diaphragm units\nof the turbine control valve and wastegate.\nThe DDE uses a PWM signal (300 Hz) to\nactuate the EPDW. The nominal voltage is\n12 V.\nElectric changeover valve (EUV)\nAn electric changeover valve (EUV) applies\nvacuum to the diaphragm unit of the\ncompressor bypass valve. The DDE controls\nthe EUV. The nominal voltage is 12 V.",
+    "metadata": {
+      "make": "BMW",
+      "model": "E46 330d",
+      "year_range": "1999-2005",
+      "source_file": "BMW Service.pdf",
+      "page_number": 31,
+      "section": "System components"
+    }
+  }
+]

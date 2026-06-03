@@ -34,7 +34,6 @@ logs/
 
 # Data, DBs, models, caches
 data/
-datasets/
 database/
 chroma_db/
 *.db
