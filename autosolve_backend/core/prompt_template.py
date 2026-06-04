@@ -1,26 +1,3 @@
-# ============================================================
-# core/prompt_template.py
-# ============================================================
-# WHAT CHANGED AND WHY:
-#
-# 1. REMOVED all bracketed instructions like [List each source...].
-#    Mistral-7B treats brackets as Mad-Libs fill-in-the-blank
-#    templates and literally copies them into the output.
-#
-# 2. REMOVED the SOURCES section entirely from the prompt.
-#    The LLM is unreliable for source citation. Sources are now
-#    built directly from ChromaDB metadata in main.py and never
-#    touch the LLM. This eliminates all source hallucinations.
-#
-# 3. ADDED a single, explicit escape-hatch phrase as Rule 3.
-#    Instead of embedding instructions inside each section
-#    (which Mistral echoes back), one fallback phrase is defined
-#    once at the top and referenced by rule number.
-#
-# 4. CONTEXT is labeled with neutral Document N markers, not
-#    file names, so the LLM cannot read and repeat file names.
-# ============================================================
-
 DIAGNOSTIC_PROMPT = """You are AutoSolve, an automotive diagnostic assistant.
 
 RULES — follow all of them without exception:
@@ -42,15 +19,26 @@ Write your response using these exact section headers on their own lines:
 --- STEP-BY-STEP SOLUTION ---
 """
 
+GENERAL_KNOWLEDGE_PROMPT = """You are AutoSolve, an automotive diagnostic assistant.
+WARNING: No verified repair manuals were found in the database for this vehicle.
+You must use your general pre-trained automotive knowledge to provide a helpful, safe diagnosis.
 
-# ============================================================
-# FALLBACK PROMPT
-# Used when confidence score is below the threshold.
-# The LLM is not called in the current fallback path —
-# hardcoded safe strings are returned instead. This prompt
-# is kept here as a reference in case you re-enable LLM
-# fallback responses in a future version.
-# ============================================================
+CRITICAL RULES:
+1. Do NOT hallucinate specific manual pages or file names.
+2. Provide general, universally accepted diagnostic steps for the given fault.
+
+--- PROBLEM EXPLANATION ---
+Briefly explain the fault code or symptom.
+
+--- CORE CAUSE ---
+List the most common universal causes for this issue.
+
+--- STEP-BY-STEP SOLUTION ---
+List general diagnostic steps to troubleshoot the issue.
+
+VEHICLE: {year} {make} {model}
+USER QUESTION: {question}
+"""
 
 FALLBACK_PROMPT = """You are AutoSolve, a professional automotive diagnostic assistant.
 No verified documentation was found for this specific vehicle and fault.

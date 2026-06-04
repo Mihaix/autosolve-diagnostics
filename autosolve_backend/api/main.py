@@ -14,7 +14,7 @@ from langchain_chroma import Chroma
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from core.prompt_template import DIAGNOSTIC_PROMPT, FALLBACK_PROMPT
+from core.prompt_template import DIAGNOSTIC_PROMPT, FALLBACK_PROMPT,GENERAL_KNOWLEDGE_PROMPT
 
 load_dotenv()
 
@@ -109,7 +109,7 @@ def expand_query(query: str) -> str:
     if vag_match:
         return f"Fault Code: {q}"
 
-    # Natural language query — use as-is
+    # Natural language query
     return q
 
 
@@ -229,44 +229,119 @@ async def diagnose_vehicle(request: DiagnosticRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Retrieval error: {str(e)}")
 
+    # results = rerank(raw_results, request.query)
+    # top_score = results[0][1] if results else 0.0
+
+    # if not results or top_score < CONFIDENCE_THRESHOLD:
+    #     return DiagnosticResponse(
+    #         problem_elaboration="No relevant documentation was found for this vehicle and fault combination.",
+    #         core_cause="Could not be determined — no verified documentation found.",
+    #         solution="Please consult a certified technician or the official workshop manual for your specific vehicle.",
+    #         sources=[],
+    #         confidence_score=0.0,
+    #         is_fallback=True
+    #     )
+
+    # context_parts = []
+    # source_list   = []
+
+    # for i, (doc, _) in enumerate(results, 1):
+    #     # Context: neutral label only — no file names visible to LLM
+    #     context_parts.append(f"[Document {i}]\n{doc.page_content}")
+
+    #     # Sources: built from metadata, completely independent of LLM
+    #     source_file = doc.metadata.get("source_file", "Unknown document")
+    #     page_number = doc.metadata.get("page_number", "?")
+    #     section     = doc.metadata.get("section", "")
+    #     citation    = f"{source_file} — Page {page_number}"
+    #     if section:
+    #         citation += f" ({section})"
+    #     if citation not in source_list:
+    #         source_list.append(citation)
+
+    # context = "\n\n".join(context_parts)
+
+    # prompt = DIAGNOSTIC_PROMPT.format(
+    #     context=context,
+    #     question=request.query
+    # )
+
+
+    # try:
+    #     llm_text = call_llm(prompt)
+    # except Exception as e:
+    #     raise HTTPException(status_code=500, detail=f"LLM error: {str(e)}")
+
+    # parsed = parse_response(llm_text)
+
+    # # Cap display score at 0.99 (boosted exact-match scores > 1.0)
+    # display_score = min(round(float(top_score), 4), 0.99)
+
+    # return DiagnosticResponse(
+    #     problem_elaboration=parsed["problem_elaboration"],
+    #     core_cause=parsed["core_cause"],
+    #     solution=parsed["solution"],
+    #     sources=source_list,   # from metadata
+    #     confidence_score=display_score,
+    #     is_fallback=False
+    # )
     results = rerank(raw_results, request.query)
     top_score = results[0][1] if results else 0.0
 
-    if not results or top_score < CONFIDENCE_THRESHOLD:
-        return DiagnosticResponse(
-            problem_elaboration="No relevant documentation was found for this vehicle and fault combination.",
-            core_cause="Could not be determined — no verified documentation found.",
-            solution="Please consult a certified technician or the official workshop manual for your specific vehicle.",
-            sources=[],
-            confidence_score=0.0,
-            is_fallback=True
-        )
+    # 1. Determine if we have Good Data or Missing Data
+    code_match = re.search(r'([PCUB]\d{4}|\d{4,5})', request.query.upper())
+    is_missing_data = False
 
+    if not results:
+        is_missing_data = True
+    elif code_match:
+        # THE FIX: Check if the exact code physically exists in the Top Document's text
+        target_code = code_match.group(1).lower()
+        top_doc_text = results[0][0].page_content.lower()
+        
+        # If the re-ranker couldn't find the code to put it at the top, it's missing!
+        if target_code not in top_doc_text:
+            is_missing_data = True
+    elif top_score < 0.20:
+        is_missing_data = True
+
+    # 2. The Prompt Router (Keep your existing code below this...)
     context_parts = []
-    source_list   = []
+    source_list = []
 
-    for i, (doc, _) in enumerate(results, 1):
-        # Context: neutral label only — no file names visible to LLM
-        context_parts.append(f"[Document {i}]\n{doc.page_content}")
+    if is_missing_data:
+        # PATH A: General Knowledge Fallback (No DB Data)
+        prompt = GENERAL_KNOWLEDGE_PROMPT.format(
+            make=request.make,
+            model=request.model,
+            year=request.year,
+            question=request.query
+        )
+        source_list = ["General AI Knowledge (No verified manuals found)"]
+        display_score = 0.50  # Hardcode a medium score so the user knows it's a guess
+    
+    else:
+        # PATH B: Standard Strict RAG (DB Data Found)
+        for i, (doc, _) in enumerate(results, 1):
+            context_parts.append(f"[Document {i}]\n{doc.page_content}")
+            source_file = doc.metadata.get("source_file", "Unknown document")
+            page_number = doc.metadata.get("page_number", "?")
+            section = doc.metadata.get("section", "")
+            
+            citation = f"{source_file} — Page {page_number}"
+            if section:
+                citation += f" ({section})"
+            if citation not in source_list:
+                source_list.append(citation)
 
-        # Sources: built from metadata, completely independent of LLM
-        source_file = doc.metadata.get("source_file", "Unknown document")
-        page_number = doc.metadata.get("page_number", "?")
-        section     = doc.metadata.get("section", "")
-        citation    = f"{source_file} — Page {page_number}"
-        if section:
-            citation += f" ({section})"
-        if citation not in source_list:
-            source_list.append(citation)
+        context = "\n\n".join(context_parts)
+        prompt = DIAGNOSTIC_PROMPT.format(
+            context=context,
+            question=request.query
+        )
+        display_score = min(round(float(top_score), 4), 0.99)
 
-    context = "\n\n".join(context_parts)
-
-    prompt = DIAGNOSTIC_PROMPT.format(
-        context=context,
-        question=request.query
-    )
-
-
+    # 3. Call the LLM and Parse (Works for both paths!)
     try:
         llm_text = call_llm(prompt)
     except Exception as e:
@@ -274,14 +349,12 @@ async def diagnose_vehicle(request: DiagnosticRequest):
 
     parsed = parse_response(llm_text)
 
-    # Cap display score at 0.99 (boosted exact-match scores > 1.0)
-    display_score = min(round(float(top_score), 4), 0.99)
-
+    # Return the final JSON
     return DiagnosticResponse(
         problem_elaboration=parsed["problem_elaboration"],
         core_cause=parsed["core_cause"],
         solution=parsed["solution"],
-        sources=source_list,   # from metadata
+        sources=source_list,
         confidence_score=display_score,
-        is_fallback=False
+        is_fallback=False  # Keep false so the UI renders the AI's general steps!
     )
