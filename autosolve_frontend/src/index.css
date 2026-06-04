@@ -1,0 +1,343 @@
+/* Custom Properties & Tokens - Racing Red/Orange/Gold Adrenaline Redesign */
+:root {
+  --font-header: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* Futuristic Racing Color Palette */
+  --bg-main: #050508;
+  --bg-card: rgba(15, 15, 22, 0.8);
+  --bg-card-hover: rgba(22, 22, 32, 0.9);
+  --border-color: rgba(255, 255, 255, 0.06);
+  --border-glow: rgba(255, 94, 0, 0.3);
+
+  --color-primary: #ff5e00; /* Neon Racing Orange */
+  --color-primary-rgb: 255, 94, 0;
+  --color-secondary: #e61919; /* Adrenaline Red */
+  --color-accent: #ffb700; /* Speed Gold/Yellow */
+
+  /* Semantic Colors */
+  --color-success: #10b981;
+  --color-warning: #ffb700;
+  --color-danger: #ef4444;
+  
+  /* Text */
+  --text-main: #ffffff;
+  --text-muted: #a0aec0;
+  --text-dark: #4a5568;
+
+  /* Shadows & Effects */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 25px -4px rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 0 20px rgba(255, 94, 0, 0.2);
+  --shadow-glow-success: 0 0 20px rgba(16, 185, 129, 0.2);
+  --shadow-glow-warning: 0 0 20px rgba(255, 183, 0, 0.2);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 9999px;
+
+  --transition-fast: 0.1s ease;
+  --transition-normal: 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Reset & Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  /* Carbon Fiber Grid Mesh + Glowing Accents */
+  background-image: 
+    linear-gradient(45deg, rgba(255, 94, 0, 0.015) 25%, transparent 25%), 
+    linear-gradient(-45deg, rgba(255, 94, 0, 0.015) 25%, transparent 25%), 
+    linear-gradient(45deg, transparent 75%, rgba(255, 94, 0, 0.015) 75%), 
+    linear-gradient(-45deg, transparent 75%, rgba(255, 94, 0, 0.015) 75%),
+    radial-gradient(at 0% 0%, rgba(230, 25, 25, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(255, 183, 0, 0.08) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(255, 94, 0, 0.05) 0px, transparent 50%);
+  background-size: 30px 30px, 30px 30px, 30px 30px, 30px 30px, 100% 100%, 100% 100%, 100% 100%;
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-header);
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--text-main);
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 94, 0, 0.2);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 94, 0, 0.4);
+}
+
+/* Typography Utilities */
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-secondary), var(--color-primary), var(--color-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-purple {
+  background: linear-gradient(135deg, var(--color-secondary), var(--color-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Glassmorphism Containers with Carbon Fiber Texture */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  transition: border-color var(--transition-normal), box-shadow var(--transition-normal), transform var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtly skewed racing panels */
+.glass-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-secondary), var(--color-primary), transparent);
+  opacity: 0.6;
+}
+
+.glass-panel:hover {
+  border-color: var(--border-glow);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+}
+
+/* Animations */
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes skeletonShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px) skewX(-1deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) skewX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn var(--transition-normal) forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--transition-normal) forwards;
+}
+
+/* Skeleton Loading State */
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,94,0,0.03) 25%, rgba(255,94,0,0.08) 50%, rgba(255,94,0,0.03) 75%);
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.5s infinite linear;
+  border-radius: var(--radius-sm);
+}
+
+.skeleton-text {
+  height: 14px;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.skeleton-title {
+  height: 22px;
+  margin-bottom: 14px;
+  width: 50%;
+}
+
+/* Button & Interactive styles */
+button, select, input, textarea {
+  font-family: var(--font-body);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.4rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  outline: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transform: skewX(-8deg); /* Slanted racing button style */
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-secondary), var(--color-primary));
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(255, 94, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px) skewX(-8deg);
+  box-shadow: 0 6px 16px rgba(255, 94, 0, 0.45);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0) skewX(-8deg);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 94, 0, 0.3);
+}
+
+/* Form Styling */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-style: italic;
+}
+
+.form-input {
+  background: rgba(10, 10, 15, 0.9);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  padding: 0.75rem 0.9rem;
+  font-size: 0.9rem;
+  transition: all var(--transition-fast);
+  width: 100%;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(255, 94, 0, 0.15);
+  background: rgba(15, 15, 22, 1);
+}
+
+.form-input::placeholder {
+  color: var(--text-dark);
+}
+
+/* Layout System - Symmetric Centering */
+.main-layout-grid {
+  display: grid;
+  grid-template-columns: 280px 720px 280px;
+  justify-content: center;
+  gap: 2.5rem;
+  align-items: start;
+  width: 100%;
+}
+
+@media (max-width: 1400px) {
+  .main-layout-grid {
+    grid-template-columns: 240px 1fr 240px;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .main-layout-grid {
+    grid-template-columns: 240px 1fr;
+    gap: 1.5rem;
+  }
+  .layout-stats-aside {
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 900px) {
+  .main-layout-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .layout-stats-aside {
+    grid-column: auto;
+  }
+}
